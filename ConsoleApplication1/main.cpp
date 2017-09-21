@@ -1,13 +1,16 @@
 // ConsoleApplication1.cpp : Defines the entry point for the console application.
 //
+#include "defines.h"
+#include "protos.h"
+#include "globals.h"
 
-#include "stdafx.h"
 #include <iostream>
 
 
 int main(int argc, char* argv[])
 {
-	std::cout << "test\n";
+	std::cout << WINGLET_PROG_VERSION << std::endl;
+	readCommands();
     return 0;
 }
 
