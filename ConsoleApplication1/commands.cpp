@@ -1,16 +1,24 @@
+#ifndef _CRT_SECURE_NO_DEPRECATE
+#define _CRT_SECURE_NO_DEPRECATE 1
+#endif
 #include <iostream>
 #include "defines.h"
 #include "protos.h"
 #include "extglobals.h"
+#include "board.h"
 
 void readCommands()
 {
 	int nextc;
 
+	if (board.nextMove == WHITE_MOVE)
 	{
 		std::cout << "wt> ";
 	}
-
+	else
+	{
+		std::cout << "bl> ";
+	}
 	std::cout.flush();
 
 	//     ===========================================================================
@@ -25,11 +33,14 @@ void readCommands()
 			{
 				if (!doCommand(CMD_BUFF)) return;
 			}
-
+			if (board.nextMove == WHITE_MOVE)
 			{
 				std::cout << "wt> ";
 			}
-
+			else
+			{
+				std::cout << "bl> ";
+			}
 			std::cout.flush();
 		}
 		else
@@ -46,6 +57,9 @@ void readCommands()
 
 bool doCommand(const char *buf)
 {
+
+	char userinput[80];
+	int number;
 
 	//     =================================================================
 	//  return when command buffer is empty
@@ -90,12 +104,99 @@ bool doCommand(const char *buf)
 	}
 
 	//     =================================================================
+	//  black: black to move
+	//     =================================================================
+	if (!strcmp(buf, "black"))
+	{
+		board.nextMove = BLACK_MOVE;
+		CMD_BUFF_COUNT = '\0';
+		return true;
+	}
+
+	//     =================================================================
+	//  d: display board
+	//     =================================================================
+	if (!strcmp(buf, "d"))
+	{
+		board.display();
+		CMD_BUFF_COUNT = '\0';
+		return true;
+	}
+
+	//     =================================================================
 	//  exit or quit: exit program
 	//     =================================================================
 	if ((!strcmp(buf, "exit")) || (!strcmp(buf, "quit")))
 	{
 		CMD_BUFF_COUNT = '\0';
 		return false;
+	}
+
+	//     =================================================================
+	//  info: display variables (for testing purposes)
+	//     =================================================================
+	if (!strcmp(buf, "info"))
+	{
+		info();
+		CMD_BUFF_COUNT = '\0';
+		return true;
+	}
+
+
+	//     =================================================================
+	//  new: start new game
+	//     =================================================================
+	if (!strcmp(buf, "new"))
+	{
+		dataInit();
+		board.init();
+		board.display();
+		CMD_BUFF_COUNT = '\0';
+		return true;
+	}
+
+	//     =================================================================
+	//  r: rotate board
+	//     =================================================================
+	if (!strcmp(buf, "r"))
+	{
+		board.viewRotated = !board.viewRotated;
+		board.display();
+		CMD_BUFF_COUNT = '\0';
+		return true;
+	}
+
+	//     =================================================================
+	//  readfen filename n : reads #-th FEN position from filename
+	//     =================================================================
+	if (!strncmp(buf, "readfen", 7))
+	{
+		sscanf(buf + 7, "%s %d", userinput, &number);
+		board.init();
+		readFen(userinput, number);
+		board.display();
+		CMD_BUFF_COUNT = '\0';
+		return true;
+	}
+
+	//     =================================================================
+	//  white: white to move
+	//     =================================================================
+	if (!strcmp(buf, "white"))
+	{
+		board.nextMove = WHITE_MOVE;
+		CMD_BUFF_COUNT = '\0';
+		return true;
+	}
+
+	//     =================================================================
+	//  setup               : setup board...
+	//     =================================================================
+	if (!strncmp(buf, "setup", 5))
+	{
+		setup();
+		CMD_BUFF_COUNT = '\0';
+		return true;
 	}
 
 	//     =================================================================

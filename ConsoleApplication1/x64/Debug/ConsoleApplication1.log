@@ -1,3 +1,11 @@
-﻿  main.cpp
+﻿  setup.cpp
+  commands.cpp
+  Generating Code...
+  Compiling...
+  readfen.cpp
+  data.cpp
+  main.cpp
+  board.cpp
+  Generating Code...
   ConsoleApplication1.vcxproj -> C:\Users\Jonathan\vexRepos\chessai\x64\Debug\ConsoleApplication1.exe
   ConsoleApplication1.vcxproj -> C:\Users\Jonathan\vexRepos\chessai\x64\Debug\ConsoleApplication1.pdb (Partial PDB)

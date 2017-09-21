@@ -148,13 +148,19 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="board.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="commands.cpp" />
+    <ClCompile Include="bitops.cpp" />
+    <ClCompile Include="data.cpp" />
+    <ClCompile Include="readfen.cpp" />
+    <ClCompile Include="setup.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="defines.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="extglobals.h" />
+    <ClInclude Include="board.h" />
     <ClInclude Include="protos.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

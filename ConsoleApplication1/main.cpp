@@ -10,6 +10,7 @@
 int main(int argc, char* argv[])
 {
 	std::cout << WINGLET_PROG_VERSION << std::endl;
+	dataInit();
 	readCommands();
     return 0;
 }
