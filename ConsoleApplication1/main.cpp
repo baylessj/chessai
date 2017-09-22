@@ -1,7 +1,6 @@
 // ConsoleApplication1.cpp : Defines the entry point for the console application.
 //
 #include "cli.h"
-#include "globals.h"
 #include <iostream>
 
 int main(int argc, char* argv[])

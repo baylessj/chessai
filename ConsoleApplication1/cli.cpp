@@ -3,12 +3,10 @@
 #endif
 #include <iostream>
 #include "cli.h"
-#include "extglobals.h"
 #include "board.h"
-#include "bitops.h"
+#include "pieces.h"
 
 CLI cli;
-
 
 char CMD_BUFF[cli.MAX_CMD_BUFF];
 int CMD_BUFF_COUNT = 0;

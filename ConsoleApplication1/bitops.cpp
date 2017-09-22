@@ -1,7 +1,12 @@
 #include <iostream>
 #include <iomanip>
 #include "cli.h"
-#include "extglobals.h"
+#include "bitops.h"
+#include "board.h"
+#include "pieces.h"
+
+// used in Eugene Nalimov's bitScanReverse
+int MS1BTABLE[256];
 
 unsigned int bitCnt(BitMap bitmap)
 {

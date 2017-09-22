@@ -1,6 +1,8 @@
 #pragma once
 
-#include "board.h"
+typedef unsigned long long BitMap;
+
+extern int MS1BTABLE[];
 
 unsigned int bitCnt(BitMap);
 unsigned int lastOne(BitMap);
