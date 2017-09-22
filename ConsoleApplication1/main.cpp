@@ -6,7 +6,7 @@
 int main(int argc, char* argv[])
 {
 	std::cout << ENGINE_VERSION << std::endl;
-	cli.dataInit();
+	CLI cli;
 	cli.readCommands();
     return 0;
 }

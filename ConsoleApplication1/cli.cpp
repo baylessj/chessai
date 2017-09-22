@@ -1,15 +1,13 @@
 #ifndef _CRT_SECURE_NO_DEPRECATE
 #define _CRT_SECURE_NO_DEPRECATE 1
 #endif
+
 #include <iostream>
 #include "cli.h"
 #include "board.h"
 #include "pieces.h"
 
-CLI cli;
-
-char CMD_BUFF[cli.MAX_CMD_BUFF];
-int CMD_BUFF_COUNT = 0;
+using namespace std;
 
 void CLI::readCommands()
 {
@@ -17,17 +15,15 @@ void CLI::readCommands()
 
 	if (board.nextMove == WHITE_MOVE)
 	{
-		std::cout << "wt> ";
+		cout << "wt> ";
 	}
 	else
 	{
-		std::cout << "bl> ";
+		cout << "bl> ";
 	}
-	std::cout.flush();
+	cout.flush();
 
-	//     ===========================================================================
-	//     Read a command and call doCommand:
-	//     ===========================================================================
+	// Read a command
 	while ((nextc = getc(stdin)) != EOF)
 	{
 		if (nextc == '\n')
@@ -39,19 +35,19 @@ void CLI::readCommands()
 			}
 			if (board.nextMove == WHITE_MOVE)
 			{
-				std::cout << "wt> ";
+				cout << "wt> ";
 			}
 			else
 			{
-				std::cout << "bl> ";
+				cout << "bl> ";
 			}
-			std::cout.flush();
+			cout.flush();
 		}
 		else
 		{
 			if (CMD_BUFF_COUNT >= MAX_CMD_BUFF - 1)
 			{
-				std::cout << "Warning: command buffer full !! " << std::endl;
+				cout << "Warning: command buffer full !! " << endl;
 				CMD_BUFF_COUNT = 0;
 			}
 			CMD_BUFF[CMD_BUFF_COUNT++] = nextc;
@@ -65,51 +61,43 @@ bool CLI::doCommand(const char *buf)
 	char userinput[80];
 	int number;
 
-	//     =================================================================
-	//  return when command buffer is empty
-	//     =================================================================
-
 	if (!strcmp(buf, ""))
 	{
 		CMD_BUFF_COUNT = '\0';
-		return true;
+		return true; // return when buffer is empty
 	}
 
-	//     =================================================================
-	//  help, h, or ?: show this help
-	//     =================================================================
+	// Help Menu
 	if ((!strcmp(buf, "help")) || (!strcmp(buf, "h")) || (!strcmp(buf, "?")))
 	{
-		std::cout << std::endl << "help:" << std::endl;
-		std::cout << "black               : BLACK to move" << std::endl;
-		std::cout << "cc                  : play computer-to-computer " << std::endl;
-		std::cout << "d                   : display board " << std::endl;
-		std::cout << "exit                : exit program " << std::endl;
-		std::cout << "eval                : show static evaluation of this position" << std::endl;
-		std::cout << "game                : show game moves " << std::endl;
-		std::cout << "go                  : computer next move " << std::endl;
-		std::cout << "help, h, or ?       : show this help " << std::endl;
-		std::cout << "info                : display variables (for testing purposes)" << std::endl;
-		std::cout << "move e2e4, or h7h8q : enter a move (use this format)" << std::endl;
-		std::cout << "moves               : show all legal moves" << std::endl;
-		std::cout << "new                 : start new game" << std::endl;
-		std::cout << "perf                : benchmark a number of key functions" << std::endl;
-		std::cout << "perft n             : calculate raw number of nodes from here, depth n " << std::endl;
-		std::cout << "quit                : exit program " << std::endl;
-		std::cout << "r                   : rotate board " << std::endl;
-		std::cout << "readfen filename n  : reads #-th FEN position from filename" << std::endl;
-		std::cout << "sd n                : set the search depth to n" << std::endl;
-		std::cout << "setup               : setup board... " << std::endl;
-		std::cout << "undo                : take back last move" << std::endl;
-		std::cout << "white               : WHITE to move" << std::endl;
-		std::cout << std::endl;
+		cout << endl << "help:" << endl;
+		cout << "black               : BLACK to move" << endl;
+		cout << "cc                  : play computer-to-computer " << endl;
+		cout << "d                   : display board " << endl;
+		cout << "exit                : exit program " << endl;
+		cout << "eval                : show static evaluation of this position" << endl;
+		cout << "game                : show game moves " << endl;
+		cout << "go                  : computer next move " << endl;
+		cout << "help, h, or ?       : show this help " << endl;
+		cout << "info                : display variables (for testing purposes)" << endl;
+		cout << "move e2e4, or h7h8q : enter a move (use this format)" << endl;
+		cout << "moves               : show all legal moves" << endl;
+		cout << "new                 : start new game" << endl;
+		cout << "perf                : benchmark a number of key functions" << endl;
+		cout << "perft n             : calculate raw number of nodes from here, depth n " << endl;
+		cout << "quit                : exit program " << endl;
+		cout << "r                   : rotate board " << endl;
+		cout << "readfen filename n  : reads #-th FEN position from filename" << endl;
+		cout << "sd n                : set the search depth to n" << endl;
+		cout << "setup               : setup board... " << endl;
+		cout << "undo                : take back last move" << endl;
+		cout << "white               : WHITE to move" << endl;
+		cout << endl;
 		CMD_BUFF_COUNT = '\0';
 		return true;
 	}
 
-	//     =================================================================
-	//  black: black to move
-	//     =================================================================
+	// Black to Move
 	if (!strcmp(buf, "black"))
 	{
 		board.nextMove = BLACK_MOVE;
@@ -117,9 +105,7 @@ bool CLI::doCommand(const char *buf)
 		return true;
 	}
 
-	//     =================================================================
-	//  d: display board
-	//     =================================================================
+	// Display Board
 	if (!strcmp(buf, "d"))
 	{
 		board.display();
@@ -127,18 +113,14 @@ bool CLI::doCommand(const char *buf)
 		return true;
 	}
 
-	//     =================================================================
-	//  exit or quit: exit program
-	//     =================================================================
+	// Exit Program
 	if ((!strcmp(buf, "exit")) || (!strcmp(buf, "quit")))
 	{
 		CMD_BUFF_COUNT = '\0';
 		return false;
 	}
 
-	//     =================================================================
-	//  info: display variables (for testing purposes)
-	//     =================================================================
+	// Debug info
 	if (!strcmp(buf, "info"))
 	{
 		info();
@@ -146,22 +128,50 @@ bool CLI::doCommand(const char *buf)
 		return true;
 	}
 
-
-	//     =================================================================
-	//  new: start new game
-	//     =================================================================
+	// New Game
 	if (!strcmp(buf, "new"))
 	{
-		dataInit();
+		BITSET[0] = 0x1;
+		for (int i = 1; i < 64; i++)
+		{
+			BITSET[i] = BITSET[i - 1] << 1;
+		}
+
+		//     ===========================================================================
+		//     BOARDINDEX is used to translate [file][rank] to [square],
+		//  Note that file is from 1..8 and rank from 1..8 (not starting from 0)
+		//     ===========================================================================
+		for (int rank = 0; rank < 9; rank++)
+		{
+			for (int file = 0; file < 9; file++)
+			{
+				BOARDINDEX[file][rank] = (rank - 1) * 8 + file - 1;
+			}
+		}
+
 		board.init();
+
+		//     ===========================================================================
+		//     Initialize MS1BTABLE, used in lastOne (see bitops.cpp)
+		//     ===========================================================================
+		for (int i = 0; i < 256; i++)
+		{
+			MS1BTABLE[i] = (
+				(i > 127) ? 7 :
+				(i >  63) ? 6 :
+				(i >  31) ? 5 :
+				(i >  15) ? 4 :
+				(i >   7) ? 3 :
+				(i >   3) ? 2 :
+				(i >   1) ? 1 : 0);
+		}
+
 		board.display();
 		CMD_BUFF_COUNT = '\0';
 		return true;
 	}
 
-	//     =================================================================
-	//  r: rotate board
-	//     =================================================================
+	// Rotate Board
 	if (!strcmp(buf, "r"))
 	{
 		board.viewRotated = !board.viewRotated;
@@ -170,9 +180,7 @@ bool CLI::doCommand(const char *buf)
 		return true;
 	}
 
-	//     =================================================================
-	//  readfen filename n : reads #-th FEN position from filename
-	//     =================================================================
+	// Reads #-th FEN position from filename
 	if (!strncmp(buf, "readfen", 7))
 	{
 		sscanf(buf + 7, "%s %d", userinput, &number);
@@ -183,9 +191,7 @@ bool CLI::doCommand(const char *buf)
 		return true;
 	}
 
-	//     =================================================================
-	//  white: white to move
-	//     =================================================================
+	// White to Move
 	if (!strcmp(buf, "white"))
 	{
 		board.nextMove = WHITE_MOVE;
@@ -193,9 +199,7 @@ bool CLI::doCommand(const char *buf)
 		return true;
 	}
 
-	//     =================================================================
-	//  setup               : setup board...
-	//     =================================================================
+	// Board Setup
 	if (!strncmp(buf, "setup", 5))
 	{
 		setup();
@@ -203,23 +207,16 @@ bool CLI::doCommand(const char *buf)
 		return true;
 	}
 
-	//     =================================================================
-	//  unknown command
-	//     =================================================================
-	std::cout << "    command not implemented: " << buf << ", type 'help' for more info" << std::endl;
+	// Unknown Command
+	cout << "    command not implemented: " << buf << ", type 'help' for more info" << endl;
 	CMD_BUFF_COUNT = '\0';
 	return true;
 }
 
-void CLI::dataInit()
-{
-	int i, rank, file;
-
-	//     ===========================================================================
-	//     BITSET has only one bit set:
-	//     ===========================================================================
+CLI::CLI() {
+	// BITSET has only one bitset
 	BITSET[0] = 0x1;
-	for (i = 1; i < 64; i++)
+	for (int i = 1; i < 64; i++)
 	{
 		BITSET[i] = BITSET[i - 1] << 1;
 	}
@@ -228,23 +225,21 @@ void CLI::dataInit()
 	//     BOARDINDEX is used to translate [file][rank] to [square],
 	//  Note that file is from 1..8 and rank from 1..8 (not starting from 0)
 	//     ===========================================================================
-	for (rank = 0; rank < 9; rank++)
+	for (int rank = 0; rank < 9; rank++)
 	{
-		for (file = 0; file < 9; file++)
+		for (int file = 0; file < 9; file++)
 		{
 			BOARDINDEX[file][rank] = (rank - 1) * 8 + file - 1;
 		}
 	}
 
-	//     ===========================================================================
-	//     Initialize the board
-	//     ===========================================================================
+	// Initialize the Board
 	board.init();
 
 	//     ===========================================================================
 	//     Initialize MS1BTABLE, used in lastOne (see bitops.cpp)
 	//     ===========================================================================
-	for (i = 0; i < 256; i++)
+	for (int i = 0; i < 256; i++)
 	{
 		MS1BTABLE[i] = (
 			(i > 127) ? 7 :
@@ -263,18 +258,18 @@ void CLI::info()
 {
 
 	//  your playground... display variables - meant for testing/verification purposes only
-	std::cout << std::endl << "============ info start ==============" << std::endl;
-	std::cout << "size of board, in bytes   = " << sizeof(board) << std::endl;
-	std::cout << "Material value            = " << board.Material << std::endl;
-	std::cout << "White castling rights     = " << int(board.castleWhite) << std::endl;
-	std::cout << "Black castling rights     = " << int(board.castleBlack) << std::endl;
-	std::cout << "En-passant square         = " << board.epSquare << std::endl;
-	std::cout << "Fifty move count          = " << board.fiftyMove << std::endl;
+	cout << endl << "============ info start ==============" << endl;
+	cout << "size of board, in bytes   = " << sizeof(board) << endl;
+	cout << "Material value            = " << board.Material << endl;
+	cout << "White castling rights     = " << int(board.castleWhite) << endl;
+	cout << "Black castling rights     = " << int(board.castleBlack) << endl;
+	cout << "En-passant square         = " << board.epSquare << endl;
+	cout << "Fifty move count          = " << board.fiftyMove << endl;
 
-	std::cout << "bitCnt of white pawns     = " << bitCnt(board.whitePawns) << std::endl;
-	std::cout << std::endl << "bitmap of blackKnights | board.whitePawns:" << std::endl;
+	cout << "bitCnt of white pawns     = " << bitCnt(board.whitePawns) << endl;
+	cout << endl << "bitmap of blackKnights | board.whitePawns:" << endl;
 	displayBitmap(board.blackKnights | board.whitePawns);
-	std::cout << "============ info end ================" << std::endl << std::endl;
+	cout << "============ info end ================" << endl << endl;
 
 	return;
 }
@@ -337,22 +332,22 @@ bool FEN::readFen(char *filename, int number)
 					fscanf(fp, "%d", &fenhalfmoveclock);  // int, used for the fifty move draw rule
 					fscanf(fp, "%d", &fenfullmovenumber); // int. start with 1, It is incremented after move by Black
 
-					std::cout << std::endl << "winglet> fen #" << numberf << " in " << filename << ":" << std::endl << std::endl;
-					std::cout << " White: " << fenwhite << std::endl;
-					std::cout << " Black: " << fenblack << std::endl;
-					std::cout << " " << &fen[1] << std::endl;
+					cout << endl << "winglet> fen #" << numberf << " in " << filename << ":" << endl << endl;
+					cout << " White: " << fenwhite << endl;
+					cout << " Black: " << fenblack << endl;
+					cout << " " << &fen[1] << endl;
 					if (fencolor[0] == 'w')
 					{
-						std::cout << " wt to move next" << std::endl;
+						cout << " wt to move next" << endl;
 					}
 					else
 					{
-						std::cout << " bl to move next" << std::endl;
+						cout << " bl to move next" << endl;
 					}
-					std::cout << " Castling: " << fencastling << std::endl;
-					std::cout << " EP square: " << fenenpassant << std::endl;
-					std::cout << " Fifty move count: " << fenhalfmoveclock << std::endl;
-					std::cout << " Move number: " << fenfullmovenumber << std::endl << std::endl;
+					cout << " Castling: " << fencastling << endl;
+					cout << " EP square: " << fenenpassant << endl;
+					cout << " Fifty move count: " << fenhalfmoveclock << endl;
+					cout << " Move number: " << fenfullmovenumber << endl << endl;
 				}
 			}
 		}
@@ -541,11 +536,11 @@ void CLI::setup()
 
 	if (board.nextMove == WHITE_MOVE)
 	{
-		std::cout << "wt> setup> type 'help' for more info" << std::endl;
+		cout << "wt> setup> type 'help' for more info" << endl;
 	}
 	else
 	{
-		std::cout << "bl> setup> type 'help' for more info" << std::endl;
+		cout << "bl> setup> type 'help' for more info" << endl;
 	}
 
 	// infinite loop - user input:
@@ -553,41 +548,41 @@ void CLI::setup()
 	{
 		if (board.nextMove == WHITE_MOVE)
 		{
-			std::cout << "wt> setup> ";
+			cout << "wt> setup> ";
 		}
 		else
 		{
-			std::cout << "bl> setup> ";
+			cout << "bl> setup> ";
 		}
-		std::cout.flush();
-		std::cin >> s;
+		cout.flush();
+		cin >> s;
 
 		if ((!strcmp(s, "help")) || (!strcmp(s, "h")) || (!strcmp(s, "?")))
 		{
-			std::cout << std::endl << "setup help:" << std::endl;
-			std::cout << "black               : BLACK to move" << std::endl;
-			std::cout << "castle cccc         : castling rights, using FEN-style. Example: 'castle KQkq'" << std::endl;
-			std::cout << "clear               : clear the board" << std::endl;
-			std::cout << "d                   : display board" << std::endl;
-			std::cout << "epsq cc             : set en-passant target square. Example: 'epsq e3'" << std::endl;
-			std::cout << "exit                : exit setup" << std::endl;
-			std::cout << "fen fenstring       : sets up the board with a FEN-string (6 elements)," << std::endl;
-			std::cout << "                      for instance: n1n5/PPPk4/8/8/8/8/4Kppp/5N1N b - - 0 1" << std::endl;
-			std::cout << "                      you can paste a string into the windows console" << std::endl;
-			std::cout << "                      by using your mouse and right-click paste" << std::endl;
-			std::cout << "fifty n             : n = half moves since last capture or pawn move" << std::endl;
-			std::cout << "new                 : new game" << std::endl;
-			std::cout << "r                   : rotate board" << std::endl;
-			std::cout << "rank n fenrank      : piece placement for rank n (from white's perspective)" << std::endl;
-			std::cout << "                      fenrank defines the contents of each square, from left to" << std::endl;
-			std::cout << "                      right (file a through file h). fenrank uses FEN-style:" << std::endl;
-			std::cout << "                      pieces are identified by a single letter (pawn=P," << std::endl;
-			std::cout << "                      knight=N, etc), using upper-case letters for white pieces" << std::endl;
-			std::cout << "                      and lowercase letters for black pieces." << std::endl;
-			std::cout << "                      Blank squares are noted using digits 1 through 8 (the " << std::endl;
-			std::cout << "                      number of blank squares)." << std::endl;
-			std::cout << "                      Examples: 'rank 1 R1BQKBNR' or 'rank 6 3p2p1'" << std::endl;
-			std::cout << "white               : WHITE to move" << std::endl << std::endl;
+			cout << endl << "setup help:" << endl;
+			cout << "black               : BLACK to move" << endl;
+			cout << "castle cccc         : castling rights, using FEN-style. Example: 'castle KQkq'" << endl;
+			cout << "clear               : clear the board" << endl;
+			cout << "d                   : display board" << endl;
+			cout << "epsq cc             : set en-passant target square. Example: 'epsq e3'" << endl;
+			cout << "exit                : exit setup" << endl;
+			cout << "fen fenstring       : sets up the board with a FEN-string (6 elements)," << endl;
+			cout << "                      for instance: n1n5/PPPk4/8/8/8/8/4Kppp/5N1N b - - 0 1" << endl;
+			cout << "                      you can paste a string into the windows console" << endl;
+			cout << "                      by using your mouse and right-click paste" << endl;
+			cout << "fifty n             : n = half moves since last capture or pawn move" << endl;
+			cout << "new                 : new game" << endl;
+			cout << "r                   : rotate board" << endl;
+			cout << "rank n fenrank      : piece placement for rank n (from white's perspective)" << endl;
+			cout << "                      fenrank defines the contents of each square, from left to" << endl;
+			cout << "                      right (file a through file h). fenrank uses FEN-style:" << endl;
+			cout << "                      pieces are identified by a single letter (pawn=P," << endl;
+			cout << "                      knight=N, etc), using upper-case letters for white pieces" << endl;
+			cout << "                      and lowercase letters for black pieces." << endl;
+			cout << "                      Blank squares are noted using digits 1 through 8 (the " << endl;
+			cout << "                      number of blank squares)." << endl;
+			cout << "                      Examples: 'rank 1 R1BQKBNR' or 'rank 6 3p2p1'" << endl;
+			cout << "white               : WHITE to move" << endl << endl;
 		}
 
 		else if (!strcmp(s, "black"))
@@ -598,7 +593,7 @@ void CLI::setup()
 
 		else if (!strncmp(s, "castle", 5))
 		{
-			std::cin >> castle;
+			cin >> castle;
 			whiteCastle = 0;
 			blackCastle = 0;
 			if (strstr(castle, "K")) whiteCastle += CANCASTLEOO;
@@ -625,38 +620,38 @@ void CLI::setup()
 		else if (!strcmp(s, "d"))
 		{
 			board.display();
-			std::cout << "  castleWhite = " << (int)board.castleWhite << " castleBlack = " << (int)board.castleBlack << " epSquare = "
-				<< board.epSquare << " fiftyMove = " << board.fiftyMove << std::endl << std::endl;
+			cout << "  castleWhite = " << (int)board.castleWhite << " castleBlack = " << (int)board.castleBlack << " epSquare = "
+				<< board.epSquare << " fiftyMove = " << board.fiftyMove << endl << endl;
 		}
 
 		else if (!strncmp(s, "epsq", 4))
 		{
-			std::cin >> epsqc;
+			cin >> epsqc;
 			epsq = ((int)epsqc[0] - 96) + 8 * ((int)epsqc[1] - 48) - 9;
 			board.initFromSquares(board.square, next, halfmoves, whiteCastle, blackCastle, epsq);
 		}
 
 		else if (!strcmp(s, "exit"))
 		{
-			std::cout.flush();
-			std::cin.clear();
+			cout.flush();
+			cin.clear();
 			return;
 		}
 
 		else if (!strncmp(s, "fen", 3))
 		{
-			std::cin >> fen;
-			std::cin >> fencolor;
-			std::cin >> fencastling;
-			std::cin >> fenenpassant;
-			std::cin >> fenhalfmoveclock;
-			std::cin >> fenfullmovenumber;
+			cin >> fen;
+			cin >> fencolor;
+			cin >> fencastling;
+			cin >> fenenpassant;
+			cin >> fenhalfmoveclock;
+			cin >> fenfullmovenumber;
 			FEN::setupFen(fen, fencolor, fencastling, fenenpassant, fenhalfmoveclock, fenfullmovenumber);
 		}
 
 		else if (!strncmp(s, "fifty", 5))
 		{
-			std::cin >> halfmoves;
+			cin >> halfmoves;
 			board.initFromSquares(board.square, next, halfmoves, whiteCastle, blackCastle, epsq);
 		}
 
@@ -667,10 +662,10 @@ void CLI::setup()
 
 		else if (!strcmp(s, "rank"))
 		{
-			std::cin >> rank;
+			cin >> rank;
 			if ((rank > 0) & (rank < 9))
 			{
-				std::cin >> fenrank;
+				cin >> fenrank;
 				// clear the file
 				for (file = 1; file < 9; file++)
 				{
@@ -772,8 +767,8 @@ void CLI::setup()
 		}
 		else
 		{
-			std::cout << "    command not implemented: " << s << ", type 'help' for more info" << std::endl;
-			std::cin.clear();
+			cout << "    command not implemented: " << s << ", type 'help' for more info" << endl;
+			cin.clear();
 		}
 
 	}
