@@ -14,5 +14,12 @@ public:
 	static const int MAX_CMD_BUFF = 256; // Console command input buffer
 	bool doCommand(const char *);
 	void readCommands();
+	void dataInit();
+	void info();
+	void setup();
 };
 
+extern CLI cli;
+
+extern char CMD_BUFF[];
+extern int CMD_BUFF_COUNT;

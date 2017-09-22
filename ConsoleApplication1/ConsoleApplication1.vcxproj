@@ -153,15 +153,13 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="cli.cpp" />
     <ClCompile Include="bitops.cpp" />
-    <ClCompile Include="data.cpp" />
-    <ClCompile Include="setup.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bitops.h" />
     <ClInclude Include="cli.h" />
     <ClInclude Include="globals.h" />
     <ClInclude Include="extglobals.h" />
     <ClInclude Include="board.h" />
-    <ClInclude Include="protos.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

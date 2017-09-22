@@ -26,3 +26,5 @@ public:
 	void initFromFen(char fen[], char fencolor[], char fencastling[], char fenenpassant[], int fenhalfmoveclock, int fenfullmovenumber);
 	void display();
 };
+
+extern Board board;

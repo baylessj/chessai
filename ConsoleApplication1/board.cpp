@@ -1,9 +1,11 @@
 #include <iostream>
 #include <iomanip>
 #include "cli.h"
-#include "protos.h"
+#include "bitops.h"
 #include "extglobals.h"
 #include "board.h"
+
+Board board;
 
 void Board::init()
 {
@@ -56,8 +58,6 @@ void Board::initFromSquares(int input[64], unsigned char next, int fiftyM, int c
 	// the input[64] array
 	// All board & game initializations are done through this function (including readfen and setup).
 
-	int i;
-
 	// bitboards
 	whiteKing = 0;
 	whiteQueens = 0;
@@ -76,7 +76,7 @@ void Board::initFromSquares(int input[64], unsigned char next, int fiftyM, int c
 	occupiedSquares = 0;
 
 	// populate the 12 bitboard:
-	for (i = 0; i < 64; i++)
+	for (int i = 0; i < 64; i++)
 	{
 		square[i] = input[i];
 		if (square[i] == WHITE_KING)   whiteKing = whiteKing | BITSET[i];

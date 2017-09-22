@@ -3,12 +3,7 @@
 #include "cli.h"
 #include "board.h"
 
-CLI cli;
-
-char CMD_BUFF[CLI::MAX_CMD_BUFF];
-int CMD_BUFF_COUNT = 0;
-
-Board board;
+//Board board;
 
 extern const int A8 = 56; extern const int B8 = 57; extern const int C8 = 58; extern const int D8 = 59;
 extern const int E8 = 60; extern const int F8 = 61; extern const int G8 = 62; extern const int H8 = 63;
