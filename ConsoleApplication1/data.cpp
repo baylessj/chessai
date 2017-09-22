@@ -1,6 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include "defines.h"
+#include "cli.h"
 #include "protos.h"
 #include "extglobals.h"
 

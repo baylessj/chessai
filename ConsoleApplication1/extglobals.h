@@ -1,6 +1,6 @@
 #pragma once
 
-#include "defines.h"
+#include "cli.h"
 #include "board.h"
 
 extern char CMD_BUFF[];

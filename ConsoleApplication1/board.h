@@ -2,8 +2,8 @@
 
 typedef unsigned long long BitMap;
 
-typedef struct Board 
-{
+class Board {
+public:
 	BitMap whiteKing, whiteQueens, whiteRooks, whiteBishops, whiteKnights, whitePawns;
 	BitMap blackKing, blackQueens, blackRooks, blackBishops, blackKnights, blackPawns;
 	BitMap whitePieces, blackPieces, occupiedSquares;
@@ -25,4 +25,4 @@ typedef struct Board
 	void initFromSquares(int input[64], unsigned char next, int fiftyM, int castleW, int castleB, int epSq);
 	void initFromFen(char fen[], char fencolor[], char fencastling[], char fenenpassant[], int fenhalfmoveclock, int fenfullmovenumber);
 	void display();
-} Board;
+};

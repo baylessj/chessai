@@ -1,6 +1,6 @@
 #include <iostream>
 #include <iomanip>
-#include "defines.h"
+#include "cli.h"
 #include "extglobals.h"
 
 unsigned int bitCnt(BitMap bitmap)

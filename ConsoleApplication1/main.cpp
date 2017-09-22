@@ -1,6 +1,6 @@
 // ConsoleApplication1.cpp : Defines the entry point for the console application.
 //
-#include "defines.h"
+#include "cli.h"
 #include "protos.h"
 #include "globals.h"
 
@@ -9,9 +9,9 @@
 
 int main(int argc, char* argv[])
 {
-	std::cout << WINGLET_PROG_VERSION << std::endl;
+	std::cout << ENGINE_VERSION << std::endl;
 	dataInit();
-	readCommands();
+	cli.readCommands();
     return 0;
 }
 

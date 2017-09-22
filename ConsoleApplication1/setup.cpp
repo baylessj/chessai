@@ -2,7 +2,7 @@
 #define _CRT_SECURE_NO_DEPRECATE 1
 #endif
 #include <iostream>
-#include "defines.h"
+#include "cli.h"
 #include "protos.h"
 #include "extglobals.h"
 
@@ -141,7 +141,7 @@ void setup()
 			std::cin >> fenenpassant;
 			std::cin >> fenhalfmoveclock;
 			std::cin >> fenfullmovenumber;
-			setupFen(fen, fencolor, fencastling, fenenpassant, fenhalfmoveclock, fenfullmovenumber);
+			FEN::setupFen(fen, fencolor, fencastling, fenenpassant, fenhalfmoveclock, fenfullmovenumber);
 		}
 
 		else if (!strncmp(s, "fifty", 5))

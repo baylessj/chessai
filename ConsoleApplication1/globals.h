@@ -1,9 +1,11 @@
 #pragma once
 
-#include "defines.h"
+#include "cli.h"
 #include "board.h"
 
-char CMD_BUFF[MAX_CMD_BUFF];
+CLI cli;
+
+char CMD_BUFF[CLI::MAX_CMD_BUFF];
 int CMD_BUFF_COUNT = 0;
 
 Board board;
