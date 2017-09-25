@@ -57,7 +57,7 @@ void Knight::generateMoves() {
 	int i = 0;
 	while (tempPiece) {
 		from = firstOne(tempPiece);
-		unsigned int tempMove = attacks[from] & target;
+		BitMap tempMove = attacks[from] & target;
 		while (tempMove) {
 			to = firstOne(tempMove);
 			capt = board.square[to];
