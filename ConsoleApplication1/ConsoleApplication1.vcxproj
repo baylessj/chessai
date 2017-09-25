@@ -154,6 +154,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="cli.cpp" />
     <ClCompile Include="bitops.cpp" />
+    <ClCompile Include="movement.cpp" />
     <ClCompile Include="pieces.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +162,7 @@
     <ClInclude Include="cli.h" />
     <ClInclude Include="board.h" />
     <ClInclude Include="hash.h" />
+    <ClInclude Include="movement.h" />
     <ClInclude Include="pieces.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

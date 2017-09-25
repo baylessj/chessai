@@ -38,3 +38,10 @@ extern unsigned int WHITE_OOO_CASTL;
 extern unsigned int BLACK_OOO_CASTL;
 extern unsigned int WHITE_OO_CASTL;
 extern unsigned int BLACK_OO_CASTL;
+
+class Knight {
+public:
+	void generateMoves();
+private:
+	BitMap attacks[64];
+};

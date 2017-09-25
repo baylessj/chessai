@@ -1,4 +1,5 @@
 #include "pieces.h"
+#include "board.h"
 
 // Identifier of next move:
 extern const unsigned char WHITE_MOVE = 0;
@@ -31,7 +32,7 @@ const char* PIECENAMES[16] = { "  ","P ","K ","N ","  ","B ","R ","Q ",
 BitMap BITSET[64];
 int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
 
-					  // Value of material, in centipawns:
+// Value of material, in centipawns:
 extern const int PAWN_VALUE = 100;
 extern const int KNIGHT_VALUE = 300;
 extern const int BISHOP_VALUE = 300;
@@ -47,3 +48,13 @@ unsigned int WHITE_OOO_CASTL;
 unsigned int BLACK_OOO_CASTL;
 unsigned int WHITE_OO_CASTL;
 unsigned int BLACK_OO_CASTL;
+
+void Knight::generateMoves() {
+	BitMap target = ~board.whitePieces; // possible moves are any squares besides those occupied by the white pieces
+	BitMap tempPiece = board.whiteKnights;
+
+	while (tempPiece) {
+		unsigned int from = firstOne(tempPiece);
+		unsigned int tempMove = attacks[from] & target;
+	}
+}
