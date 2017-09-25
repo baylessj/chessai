@@ -1,6 +1,7 @@
 #pragma once
 
 #include "bitops.h"
+#include "movement.h"
 
 extern const unsigned char WHITE_MOVE;
 extern const unsigned char BLACK_MOVE;
@@ -44,4 +45,5 @@ public:
 	void generateMoves();
 private:
 	BitMap attacks[64];
+	Move moves[4];
 };

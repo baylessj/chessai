@@ -53,8 +53,22 @@ void Knight::generateMoves() {
 	BitMap target = ~board.whitePieces; // possible moves are any squares besides those occupied by the white pieces
 	BitMap tempPiece = board.whiteKnights;
 
+	unsigned int from, to, capt;
+	int i = 0;
 	while (tempPiece) {
-		unsigned int from = firstOne(tempPiece);
+		from = firstOne(tempPiece);
 		unsigned int tempMove = attacks[from] & target;
+		while (tempMove) {
+			to = firstOne(tempMove);
+			capt = board.square[to];
+
+			Move move;
+			move.set(WHITE_KNIGHT, capt, from, to, 0);
+			moves[i] = move; // This will likely need refactored later
+			i++;
+
+			tempMove ^= BITSET[to]; // Rename BITSET to something more intuitive
+		}
+		tempPiece ^= BITSET[from];
 	}
 }
