@@ -1,23 +1,4 @@
 ﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(387,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (ConsoleApplication1.vcxproj).  This can lead to incorrect clean and rebuild behavior.
-  timers.cpp
-c:\users\jonathan\vexrepos\chessai\consoleapplication1\timers.cpp(140): error C3861: 'isOtherKingAttacked': identifier not found
   movement.cpp
-c:\users\jonathan\vexrepos\chessai\consoleapplication1\movement.cpp(851): error C3861: 'makeBlackPromotion': identifier not found
-c:\users\jonathan\vexrepos\chessai\consoleapplication1\movement.cpp(999): error C3861: 'unmakeWhitePromotion': identifier not found
-c:\users\jonathan\vexrepos\chessai\consoleapplication1\movement.cpp(1114): error C3861: 'unmakeBlackPromotion': identifier not found
-c:\users\jonathan\vexrepos\chessai\consoleapplication1\movement.cpp(1547): error C2065: 'BOOLTYPE': undeclared identifier
-c:\users\jonathan\vexrepos\chessai\consoleapplication1\movement.cpp(1547): error C2146: syntax error: missing ';' before identifier 'moveFound'
-c:\users\jonathan\vexrepos\chessai\consoleapplication1\movement.cpp(1547): error C2065: 'moveFound': undeclared identifier
-c:\users\jonathan\vexrepos\chessai\consoleapplication1\movement.cpp(1581): error C2065: 'moveFound': undeclared identifier
-  cli.cpp
-c:\users\jonathan\vexrepos\chessai\consoleapplication1\cli.cpp(746): error C3861: 'isOtherKingAttacked': identifier not found
-c:\users\jonathan\vexrepos\chessai\consoleapplication1\cli.cpp(774): error C3861: 'isValidTextMove': identifier not found
-c:\users\jonathan\vexrepos\chessai\consoleapplication1\cli.cpp(778): error C3861: 'isOtherKingAttacked': identifier not found
-  Generating Code...
-  Compiling...
-  bitops.cpp
-  Generating Code...
-  Compiling...
-  pieces.cpp
-  board.cpp
-  Generating Code...
+  ConsoleApplication1.vcxproj -> C:\Users\Jonathan\vexRepos\chessai\x64\Debug\chessai.exe
+  ConsoleApplication1.vcxproj -> C:\Users\Jonathan\vexRepos\chessai\x64\Debug\chessai.pdb (Partial PDB)

@@ -8,6 +8,30 @@
 // used in Eugene Nalimov's bitScanReverse
 int MS1BTABLE[256];
 
+void initBitOps() {
+	// BITSET has only one bitset
+	BITSET[0] = 0x1;
+	for (int i = 1; i < 64; i++)
+	{
+		BITSET[i] = BITSET[i - 1] << 1;
+	}
+
+	//     ===========================================================================
+	//     Initialize MS1BTABLE, used in lastOne (see bitops.cpp)
+	//     ===========================================================================
+	for (int i = 0; i < 256; i++)
+	{
+		MS1BTABLE[i] = (
+			(i > 127) ? 7 :
+			(i >  63) ? 6 :
+			(i >  31) ? 5 :
+			(i >  15) ? 4 :
+			(i >   7) ? 3 :
+			(i >   3) ? 2 :
+			(i >   1) ? 1 : 0);
+	}
+}
+
 unsigned int bitCnt(BitMap bitmap)
 {
 

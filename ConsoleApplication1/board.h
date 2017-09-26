@@ -18,7 +18,7 @@ public:
 	// additional variables:
 	int Material;                  // incrementally updated, total material on board,
 								   // in centipawns, from white's side of view
-	int square[64];                // incrementally updated, this array is usefull if we want to
+	int square[64];                // incrementally updated, this array is useful if we want to
 								   // probe what kind of piece is on a particular square.
 	bool viewRotated;              // only used for displaying the board. TRUE or FALSE.
 

@@ -23,3 +23,5 @@ public:
 	unsigned long long getms();               // return time in milliseconds
 	unsigned long long getsysms();         // return system time
 };
+
+unsigned long long perft(int, int);

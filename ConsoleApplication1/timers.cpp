@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "timers.h"
 #include "board.h"
+#include "movement.h"
 
 #pragma warning (disable: 4244)
 

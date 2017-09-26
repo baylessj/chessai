@@ -58,6 +58,18 @@ void Board::init()
 {
 	viewRotated = false;
 
+	//     ===========================================================================
+	//     BOARDINDEX is used to translate [file][rank] to [square],
+	//  Note that file is from 1..8 and rank from 1..8 (not starting from 0)
+	//     ===========================================================================
+	for (int rank = 0; rank < 9; rank++)
+	{
+		for (int file = 0; file < 9; file++)
+		{
+			BOARDINDEX[file][rank] = (rank - 1) * 8 + file - 1;
+		}
+	}
+
 	for (int i = 0; i < 64; i++) square[i] = EMPTY;
 
 	square[E1] = WHITE_KING;
@@ -168,37 +180,39 @@ void Board::display()
 {
 	int rank, file;
 
-	std::cout << std::endl;
+	using namespace std;
+
+	cout << endl;
 	{
 		if (!viewRotated)
 		{
 			for (rank = 8; rank >= 1; rank--)
 			{
-				std::cout << "    +---+---+---+---+---+---+---+---+" << std::endl;
-				std::cout << std::setw(3) << rank << " |";
+				cout << "    +---+---+---+---+---+---+---+---+" << endl;
+				cout << setw(3) << rank << " |";
 				for (file = 1; file <= 8; file++)
 				{
-					std::cout << " " << PIECENAMES[square[BOARDINDEX[file][rank]]] << "|";
+					cout << " " << PIECENAMES[square[BOARDINDEX[file][rank]]] << "|";
 				}
-				std::cout << std::endl;
+				cout << endl;
 			}
-			std::cout << "    +---+---+---+---+---+---+---+---+" << std::endl;
-			std::cout << "      a   b   c   d   e   f   g   h" << std::endl << std::endl;
+			cout << "    +---+---+---+---+---+---+---+---+" << endl;
+			cout << "      a   b   c   d   e   f   g   h" << endl << endl;
 		}
 		else
 		{
-			std::cout << "      h   g   f   e   d   c   b   a" << std::endl;
+			cout << "      h   g   f   e   d   c   b   a" << endl;
 			for (rank = 1; rank <= 8; rank++)
 			{
-				std::cout << "    +---+---+---+---+---+---+---+---+" << std::endl;
-				std::cout << "    |";
+				cout << "    +---+---+---+---+---+---+---+---+" << endl;
+				cout << "    |";
 				for (file = 8; file >= 1; file--)
 				{
-					std::cout << " " << PIECENAMES[square[BOARDINDEX[file][rank]]] << "|";
+					cout << " " << PIECENAMES[square[BOARDINDEX[file][rank]]] << "|";
 				}
-				std::cout << std::setw(3) << rank << std::endl;
+				cout << setw(3) << rank << endl;
 			}
-			std::cout << "    +---+---+---+---+---+---+---+---+" << std::endl << std::endl;
+			cout << "    +---+---+---+---+---+---+---+---+" << endl << endl;
 		}
 	}
 	return;

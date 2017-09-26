@@ -73,7 +73,73 @@ void Knight::generateMoves() {
 	}
 }
 
-void Pawn::generateMoves(unsigned char color, int moveBufIndex, BitMap freeSquares) {
+Pawn::Pawn() {
+	int file, rank, afile, arank, square;
+	for (square = 0; square < 64; square++) {
+		WHITE_PAWN_ATTACKS[square] = 0x0;
+		WHITE_PAWN_MOVES[square] = 0x0;
+		WHITE_PAWN_DOUBLE_MOVES[square] = 0x0;
+		BLACK_PAWN_ATTACKS[square] = 0x0;
+		BLACK_PAWN_MOVES[square] = 0x0;
+		BLACK_PAWN_DOUBLE_MOVES[square] = 0x0;
+	}
+
+	// WHITE_PAWN_ATTACKS
+	for (square = 0; square < 64; square++)
+	{
+		file = FILES[square]; rank = RANKS[square];
+		afile = file - 1; arank = rank + 1;
+		if ((afile >= 1) & (afile <= 8) & (arank >= 1) & (arank <= 8))
+			WHITE_PAWN_ATTACKS[square] |= BITSET[BOARDINDEX[afile][arank]];
+		afile = file + 1; arank = rank + 1;
+		if ((afile >= 1) & (afile <= 8) & (arank >= 1) & (arank <= 8))
+			WHITE_PAWN_ATTACKS[square] |= BITSET[BOARDINDEX[afile][arank]];
+	}
+
+	// WHITE_PAWN_MOVES
+	for (square = 0; square < 64; square++)
+	{
+		file = FILES[square]; rank = RANKS[square];
+		afile = file; arank = rank + 1;
+		if ((afile >= 1) & (afile <= 8) & (arank >= 1) & (arank <= 8))
+			WHITE_PAWN_MOVES[square] |= BITSET[BOARDINDEX[afile][arank]];
+		if (rank == 2)
+		{
+			afile = file; arank = rank + 2;
+			if ((afile >= 1) & (afile <= 8) & (arank >= 1) & (arank <= 8))
+				WHITE_PAWN_DOUBLE_MOVES[square] |= BITSET[BOARDINDEX[afile][arank]];
+		}
+	}
+
+	// BLACK_PAWN_ATTACKS
+	for (square = 0; square < 64; square++)
+	{
+		file = FILES[square]; rank = RANKS[square];
+		afile = file - 1; arank = rank - 1;
+		if ((afile >= 1) & (afile <= 8) & (arank >= 1) & (arank <= 8))
+			BLACK_PAWN_ATTACKS[square] |= BITSET[BOARDINDEX[afile][arank]];
+		afile = file + 1; arank = rank - 1;
+		if ((afile >= 1) & (afile <= 8) & (arank >= 1) & (arank <= 8))
+			BLACK_PAWN_ATTACKS[square] |= BITSET[BOARDINDEX[afile][arank]];
+	}
+
+	// BLACK_PAWN_MOVES
+	for (square = 0; square < 64; square++)
+	{
+		file = FILES[square]; rank = RANKS[square];
+		afile = file; arank = rank - 1;
+		if ((afile >= 1) & (afile <= 8) & (arank >= 1) & (arank <= 8))
+			BLACK_PAWN_MOVES[square] |= BITSET[BOARDINDEX[afile][arank]];
+		if (rank == 7)
+		{
+			afile = file; arank = rank - 2;
+			if ((afile >= 1) & (afile <= 8) & (arank >= 1) & (arank <= 8))
+				BLACK_PAWN_DOUBLE_MOVES[square] |= BITSET[BOARDINDEX[afile][arank]];
+		}
+	}
+}
+
+void Pawn::generateMoves(unsigned char color, int& moveBufIndex, BitMap freeSquares) {
 	Move move;
 	
 	if (color == BLACK_MOVE) {

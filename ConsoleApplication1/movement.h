@@ -5,6 +5,8 @@
 #define MAX_MOV_BUFF 4096    // Number of moves that we can store (all plies)
 #define MAX_PLY      64      // Search depth
 
+void movegenInit();
+
 class Move {
 public:
 	void set(unsigned int piece, unsigned int captured, unsigned int from, unsigned int to, unsigned int promote);
@@ -41,6 +43,20 @@ public:
 bool isAttacked(BitMap &targetBitmap, const unsigned char &fromSide);
 int movegen(int index);
 
+bool isValidTextMove(char *, Move &);
+bool isOtherKingAttacked();
+bool isOwnKingAttacked();
+
+void makeBlackPromotion(unsigned int, unsigned int &);
+void makeCapture(unsigned int &, unsigned int &);
+void makeMove(Move &);
+void makeWhitePromotion(unsigned int, unsigned int &);
+
+void unmakeBlackPromotion(unsigned int, unsigned int &);
+void unmakeCapture(unsigned int &, unsigned int &);
+void unmakeMove(Move &);
+void unmakeWhitePromotion(unsigned int, unsigned int &);
+
 #define MAX_GAME_LINE 4096
 
 struct GameLineRecord
@@ -51,13 +67,6 @@ struct GameLineRecord
 	int epSquare;                  // En-passant target square after double pawn move
 	int fiftyMove;                 // Moves since the last pawn move or capture
 };
-
-void makeMove(Move &move);
-void unmakeMove(Move &move);
-void makeCapture(unsigned int &captured, unsigned int &to);
-void unmakeCapture(unsigned int &captured, unsigned int &to);
-void makeWhitePromotion(unsigned int prom, unsigned int &to);
-
 
 extern BitMap WHITE_PAWN_ATTACKS[];
 extern BitMap WHITE_PAWN_MOVES[];
