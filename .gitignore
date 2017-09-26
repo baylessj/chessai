@@ -18,6 +18,7 @@
 [Rr]elease/
 [Rr]eleases/
 x64/
+x64/Debug
 x86/
 bld/
 [Bb]in/
