@@ -1,5 +1,6 @@
 #pragma once
 #include "bitops.h"
+#include <string.h>
 
 #define MAX_MOV_BUFF 4096    // Number of moves that we can store (all plies)
 #define MAX_PLY      64      // Search depth
@@ -39,6 +40,24 @@ public:
 
 bool isAttacked(BitMap &targetBitmap, const unsigned char &fromSide);
 int movegen(int index);
+
+#define MAX_GAME_LINE 4096
+
+struct GameLineRecord
+{
+	Move move;
+	unsigned char castleWhite;     // White's castle status, CANCASTLEOO = 1, CANCASTLEOOO = 2
+	unsigned char castleBlack;     // Black's castle status, CANCASTLEOO = 1, CANCASTLEOOO = 2
+	int epSquare;                  // En-passant target square after double pawn move
+	int fiftyMove;                 // Moves since the last pawn move or capture
+};
+
+void makeMove(Move &move);
+void unmakeMove(Move &move);
+void makeCapture(unsigned int &captured, unsigned int &to);
+void unmakeCapture(unsigned int &captured, unsigned int &to);
+void makeWhitePromotion(unsigned int prom, unsigned int &to);
+
 
 extern BitMap WHITE_PAWN_ATTACKS[];
 extern BitMap WHITE_PAWN_MOVES[];

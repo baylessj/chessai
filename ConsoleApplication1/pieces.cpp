@@ -72,3 +72,98 @@ void Knight::generateMoves() {
 		tempPiece ^= BITSET[from];
 	}
 }
+
+void Pawn::generateMoves(unsigned char color, int moveBufIndex, BitMap freeSquares) {
+	Move move;
+	
+	if (color == BLACK_MOVE) {
+		move.setPiec(BLACK_PAWN);
+		BitMap tempPiece = board.blackPawns;
+		while (tempPiece)
+		{
+			unsigned int from = firstOne(tempPiece);
+			move.setFrom(from);
+			BitMap tempMove = BLACK_PAWN_MOVES[from] & freeSquares;                // normal moves
+			if (RANKS[from] == 7 && tempMove)
+				tempMove |= (BLACK_PAWN_DOUBLE_MOVES[from] & freeSquares);  // add double moves
+			tempMove |= BLACK_PAWN_ATTACKS[from] & board.whitePieces;       // add captures
+			while (tempMove)
+			{
+				unsigned int to = firstOne(tempMove);
+				move.setTosq(to);
+				move.setCapt(board.square[to]);
+				if ((RANKS[to]) == 1)  // add promotions
+				{
+					move.setProm(BLACK_QUEEN);   board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					move.setProm(BLACK_ROOK);    board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					move.setProm(BLACK_BISHOP);  board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					move.setProm(BLACK_KNIGHT);  board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					move.setProm(EMPTY);
+				}
+				else
+				{
+					board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+				}
+				tempMove ^= BITSET[to];
+			}
+			// add en-passant captures:
+			if (board.epSquare)   // do a quick check first
+			{
+				if (BLACK_PAWN_ATTACKS[from] & BITSET[board.epSquare])
+				{
+					move.setProm(BLACK_PAWN);
+					move.setCapt(WHITE_PAWN);
+					move.setTosq(board.epSquare);
+					board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+				}
+			}
+			tempPiece ^= BITSET[from];
+			move.setProm(EMPTY);
+		}
+	}
+	else if (color == WHITE_MOVE) {
+		move.setPiec(WHITE_PAWN);
+		BitMap tempPiece = board.whitePawns;
+		while (tempPiece)
+		{
+			unsigned int from = firstOne(tempPiece);
+			move.setFrom(from);
+			BitMap tempMove = WHITE_PAWN_MOVES[from] & freeSquares;                // normal moves
+			if (RANKS[from] == 2 && tempMove)
+				tempMove |= (WHITE_PAWN_DOUBLE_MOVES[from] & freeSquares);  // add double moves
+			tempMove |= WHITE_PAWN_ATTACKS[from] & board.blackPieces;       // add captures
+			while (tempMove)
+			{
+				unsigned int to = firstOne(tempMove);
+				move.setTosq(to);
+				move.setCapt(board.square[to]);
+				if ((RANKS[to]) == 8)                                       // add promotions
+				{
+					move.setProm(WHITE_QUEEN);   board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					move.setProm(WHITE_ROOK);    board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					move.setProm(WHITE_BISHOP);  board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					move.setProm(WHITE_KNIGHT);  board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					move.setProm(EMPTY);
+				}
+				else
+				{
+					board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+				}
+				tempMove ^= BITSET[to];
+			}
+			// add en-passant captures:
+			if (board.epSquare)   // do a quick check first
+			{
+				if (WHITE_PAWN_ATTACKS[from] & BITSET[board.epSquare])
+				{
+					move.setProm(WHITE_PAWN);
+					move.setCapt(BLACK_PAWN);
+					move.setTosq(board.epSquare);
+					board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+				}
+			}
+			tempPiece ^= BITSET[from];
+			move.setProm(EMPTY);
+		}
+	}
+}

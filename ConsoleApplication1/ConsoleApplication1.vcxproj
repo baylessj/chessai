@@ -156,6 +156,7 @@
     <ClCompile Include="bitops.cpp" />
     <ClCompile Include="movement.cpp" />
     <ClCompile Include="pieces.cpp" />
+    <ClCompile Include="timers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="bitops.h" />
@@ -164,6 +165,7 @@
     <ClInclude Include="hash.h" />
     <ClInclude Include="movement.h" />
     <ClInclude Include="pieces.h" />
+    <ClInclude Include="timers.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

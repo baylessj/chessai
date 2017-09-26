@@ -47,3 +47,8 @@ private:
 	BitMap attacks[64];
 	Move moves[4];
 };
+
+class Pawn {
+public:
+	void generateMoves(unsigned char color, int moveBufIndex, BitMap freeSquares);
+};

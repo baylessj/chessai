@@ -6,6 +6,7 @@
 #include "cli.h"
 #include "board.h"
 #include "pieces.h"
+#include "timers.h"
 
 using namespace std;
 
@@ -571,69 +572,74 @@ static void displayMove(Move &move)
 
 	if ((move.getPiec() == WHITE_KING) && (move.isCastleOO()))
 	{
-		std::cout << "O-O";
+		cout << "O-O";
 		return;
 	};
 	if ((move.getPiec() == WHITE_KING) && (move.isCastleOOO()))
 	{
-		std::cout << "O-O-O";
+		cout << "O-O-O";
 		return;
 	};
 	if ((move.getPiec() == BLACK_KING) && (move.isCastleOO()))
 	{
-		std::cout << "O-O";
+		cout << "O-O";
 		return;
 	};
 	if ((move.getPiec() == BLACK_KING) && (move.isCastleOOO()))
 	{
-		std::cout << "O-O-O";
+		cout << "O-O-O";
 		return;
 	};
 
-	if ((move.getPiec() == WHITE_ROOK) || (move.getPiec() == BLACK_ROOK))   std::cout << "R";
-	if ((move.getPiec() == WHITE_BISHOP) || (move.getPiec() == BLACK_BISHOP)) std::cout << "B";
-	if ((move.getPiec() == WHITE_KNIGHT) || (move.getPiec() == BLACK_KNIGHT)) std::cout << "N";
-	if ((move.getPiec() == WHITE_KING) || (move.getPiec() == BLACK_KING))   std::cout << "K";
-	if ((move.getPiec() == WHITE_QUEEN) || (move.getPiec() == BLACK_QUEEN))  std::cout << "Q";
+	if ((move.getPiec() == WHITE_ROOK) || (move.getPiec() == BLACK_ROOK))   cout << "R";
+	if ((move.getPiec() == WHITE_BISHOP) || (move.getPiec() == BLACK_BISHOP)) cout << "B";
+	if ((move.getPiec() == WHITE_KNIGHT) || (move.getPiec() == BLACK_KNIGHT)) cout << "N";
+	if ((move.getPiec() == WHITE_KING) || (move.getPiec() == BLACK_KING))   cout << "K";
+	if ((move.getPiec() == WHITE_QUEEN) || (move.getPiec() == BLACK_QUEEN))  cout << "Q";
 	if (((move.getPiec() == WHITE_PAWN) || (move.getPiec() == BLACK_PAWN)) && move.isCapture())
 	{
-		if (FILES[move.getFrom()] == 1) std::cout << "a";
-		if (FILES[move.getFrom()] == 2) std::cout << "b";
-		if (FILES[move.getFrom()] == 3) std::cout << "c";
-		if (FILES[move.getFrom()] == 4) std::cout << "d";
-		if (FILES[move.getFrom()] == 5) std::cout << "e";
-		if (FILES[move.getFrom()] == 6) std::cout << "f";
-		if (FILES[move.getFrom()] == 7) std::cout << "g";
-		if (FILES[move.getFrom()] == 8) std::cout << "h";
+		if (FILES[move.getFrom()] == 1) cout << "a";
+		if (FILES[move.getFrom()] == 2) cout << "b";
+		if (FILES[move.getFrom()] == 3) cout << "c";
+		if (FILES[move.getFrom()] == 4) cout << "d";
+		if (FILES[move.getFrom()] == 5) cout << "e";
+		if (FILES[move.getFrom()] == 6) cout << "f";
+		if (FILES[move.getFrom()] == 7) cout << "g";
+		if (FILES[move.getFrom()] == 8) cout << "h";
 	}
 
-	if (move.isCapture()) std::cout << "x";
+	if (move.isCapture()) cout << "x";
 
-	if (FILES[move.getTosq()] == 1) std::cout << "a";
-	if (FILES[move.getTosq()] == 2) std::cout << "b";
-	if (FILES[move.getTosq()] == 3) std::cout << "c";
-	if (FILES[move.getTosq()] == 4) std::cout << "d";
-	if (FILES[move.getTosq()] == 5) std::cout << "e";
-	if (FILES[move.getTosq()] == 6) std::cout << "f";
-	if (FILES[move.getTosq()] == 7) std::cout << "g";
-	if (FILES[move.getTosq()] == 8) std::cout << "h";
+	if (FILES[move.getTosq()] == 1) cout << "a";
+	if (FILES[move.getTosq()] == 2) cout << "b";
+	if (FILES[move.getTosq()] == 3) cout << "c";
+	if (FILES[move.getTosq()] == 4) cout << "d";
+	if (FILES[move.getTosq()] == 5) cout << "e";
+	if (FILES[move.getTosq()] == 6) cout << "f";
+	if (FILES[move.getTosq()] == 7) cout << "g";
+	if (FILES[move.getTosq()] == 8) cout << "h";
 
-	std::cout << RANKS[move.getTosq()];
+	cout << RANKS[move.getTosq()];
 
 	if (move.isPromotion())
 	{
-		if ((move.getProm() == WHITE_ROOK) || (move.getProm() == BLACK_ROOK))   std::cout << "=R";
-		if ((move.getProm() == WHITE_BISHOP) || (move.getProm() == BLACK_BISHOP)) std::cout << "=B";
-		if ((move.getProm() == WHITE_KNIGHT) || (move.getProm() == BLACK_KNIGHT)) std::cout << "=N";
-		if ((move.getProm() == WHITE_KING) || (move.getProm() == BLACK_KING))   std::cout << "=K";
-		if ((move.getProm() == WHITE_QUEEN) || (move.getProm() == BLACK_QUEEN))  std::cout << "=Q";
+		if ((move.getProm() == WHITE_ROOK) || (move.getProm() == BLACK_ROOK))   cout << "=R";
+		if ((move.getProm() == WHITE_BISHOP) || (move.getProm() == BLACK_BISHOP)) cout << "=B";
+		if ((move.getProm() == WHITE_KNIGHT) || (move.getProm() == BLACK_KNIGHT)) cout << "=N";
+		if ((move.getProm() == WHITE_KING) || (move.getProm() == BLACK_KING))   cout << "=K";
+		if ((move.getProm() == WHITE_QUEEN) || (move.getProm() == BLACK_QUEEN))  cout << "=Q";
 	}
-	std::cout.flush();
+	cout.flush();
 	return;
 }
 
 bool CLI::doCommand(const char *buf)
 {
+	Move move;
+	Timer timer;
+	unsigned long long msStart;
+	unsigned long long msStop;
+	unsigned long long perftcount;
 	char userinput[80];
 	int number;
 
@@ -705,18 +711,85 @@ bool CLI::doCommand(const char *buf)
 	}
 
 	//     =================================================================
+	//  game: show game moves
+	//     =================================================================
+	if (!strcmp(buf, "game"))
+	{
+		if (board.endOfGame)
+		{
+			for (int i = 0; i < board.endOfGame; i++)
+			{
+				cout << i + 1 << ". ";
+				displayMove(board.gameLine[i].move);
+				cout << endl;
+			}
+		}
+		else
+		{
+			cout << "there are no game moves" << endl;
+		}
+		CMD_BUFF_COUNT = '\0';
+		return true;
+	}
+
+	//     =================================================================
 	//  moves: show all legal moves
 	//     =================================================================
 	if (!strcmp(buf, "moves"))
 	{
 		board.moveBufLen[0] = 0;
 		board.moveBufLen[1] = movegen(board.moveBufLen[0]);
-		std::cout << std::endl << "pseudo-legal moves from this position:" << std::endl;
+		cout << endl << "moves from this position:" << endl;
 		for (int i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
 		{
-			std::cout << i + 1 << ". ";
-			displayMove(board.moveBuffer[i]);
-			std::cout << std::endl;
+			makeMove(board.moveBuffer[i]);
+			if (isOtherKingAttacked())
+			{
+				unmakeMove(board.moveBuffer[i]);
+			}
+			else
+			{
+				cout << i + 1 << ". ";
+				displayMove(board.moveBuffer[i]);
+				cout << endl;
+				unmakeMove(board.moveBuffer[i]);
+			}
+		}
+		CMD_BUFF_COUNT = '\0';
+		return true;
+	}
+
+	//     =================================================================
+	//  move (do a move) [console mode only]
+	//     =================================================================
+
+	if (!strncmp(buf, "move", 4))
+	{
+		sscanf(buf + 4, "%s", userinput);
+
+		// generate the pseudo-legal move list
+		board.moveBufLen[0] = 0;
+		board.moveBufLen[1] = movegen(board.moveBufLen[0]);
+
+		if (isValidTextMove(userinput, move))        // check to see if the user move is also found in the pseudo-legal move list
+		{
+			makeMove(move);
+
+			if (isOtherKingAttacked())              // post-move check to see if we are leaving our king in check
+			{
+				unmakeMove(move);
+				cout << "    invalid move, leaving king in check: " << userinput << endl;
+			}
+			else
+			{
+				board.endOfGame++;
+				board.endOfSearch = board.endOfGame;
+				board.display();
+			}
+		}
+		else
+		{
+			cout << "    move is invalid or not recognized: " << userinput << endl;
 		}
 		CMD_BUFF_COUNT = '\0';
 		return true;

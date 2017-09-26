@@ -39,6 +39,9 @@
     <ClCompile Include="movement.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="timers.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="board.h">
@@ -57,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="movement.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="timers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
