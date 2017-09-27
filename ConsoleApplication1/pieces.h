@@ -51,5 +51,5 @@ private:
 class Pawn {
 public:
 	Pawn();
-	void generateMoves(unsigned char color, int& moveBufIndex, BitMap freeSquares);
+	void generateMoves(unsigned char color, int* moveBufIndex, BitMap freeSquares);
 };

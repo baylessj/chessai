@@ -636,7 +636,6 @@ void Move::setCapt(unsigned int capt)
 
 void Move::setProm(unsigned int prom)
 {   // bits 20..23
-	std::cout << prom <<std::endl;
 	bitfield &= 0xff0fffff; bitfield |= (prom & 0x0000000f) << 20;
 }
 
@@ -748,6 +747,7 @@ bool Move::isCastleOOO()
 
 int movegen(int index)
 {
+	//index is passed in as zero
 
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// This is winglet's pseudo-legal bitmap move generator,
@@ -777,7 +777,7 @@ int movegen(int index)
 		
 		// Black Pawns
 		Pawn pawn;
-		pawn.generateMoves(BLACK_MOVE, index, freeSquares);
+		pawn.generateMoves(BLACK_MOVE, &index, freeSquares);
 
 		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// Black Knights
@@ -919,7 +919,7 @@ int movegen(int index)
 
 	    // White Pawns
 		Pawn pawn;
-		pawn.generateMoves(WHITE_MOVE, index, freeSquares);
+		pawn.generateMoves(WHITE_MOVE, &index, freeSquares);
 
 		// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 		// White Knights
@@ -1050,6 +1050,11 @@ int movegen(int index)
 			tempPiece ^= BITSET[from];
 			move.setProm(EMPTY);
 		}
+	}
+	for (int i = 0; i < index; i++) {
+		if (board.moveBuffer[i].getProm() != 0)
+		std::cout << i << std::endl;
+		// 0 and 1 moves are borked
 	}
 	return index;
 }
@@ -1187,7 +1192,6 @@ void makeMove(Move &move)
 		{
 			makeWhitePromotion(move.getProm(), to);
 			board.square[to] = move.getProm();
-			std::cout << move.getProm() << std::endl;
 		}
 		
 		break;

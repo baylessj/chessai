@@ -9,6 +9,9 @@ void movegenInit();
 
 class Move {
 public:
+	Move() {
+		this->clear();
+	}
 	void set(unsigned int piece, unsigned int captured, unsigned int from, unsigned int to, unsigned int promote);
 	void setFrom(unsigned int from);
 	void setTosq(unsigned int tosq);

@@ -140,7 +140,7 @@ Pawn::Pawn() {
 	}
 }
 
-void Pawn::generateMoves(unsigned char color, int& moveBufIndex, BitMap freeSquares) {
+void Pawn::generateMoves(unsigned char color, int* moveBufIndex, BitMap freeSquares) {
 	Move move;
 	
 	if (color == BLACK_MOVE) {
@@ -161,16 +161,15 @@ void Pawn::generateMoves(unsigned char color, int& moveBufIndex, BitMap freeSqua
 				move.setCapt(board.square[to]);
 				if ((RANKS[to]) == 1)  // add promotions
 				{
-					std::cout << "here";
-					move.setProm(BLACK_QUEEN);   board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
-					move.setProm(BLACK_ROOK);    board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
-					move.setProm(BLACK_BISHOP);  board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
-					move.setProm(BLACK_KNIGHT);  board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					move.setProm(BLACK_QUEEN);   board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
+					move.setProm(BLACK_ROOK);    board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
+					move.setProm(BLACK_BISHOP);  board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
+					move.setProm(BLACK_KNIGHT);  board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
 					move.setProm(EMPTY);
 				}
 				else
 				{
-					board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
 				}
 				tempMove ^= BITSET[to];
 			}
@@ -182,7 +181,7 @@ void Pawn::generateMoves(unsigned char color, int& moveBufIndex, BitMap freeSqua
 					move.setProm(BLACK_PAWN);
 					move.setCapt(WHITE_PAWN);
 					move.setTosq(board.epSquare);
-					board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
 				}
 			}
 			tempPiece ^= BITSET[from];
@@ -205,17 +204,17 @@ void Pawn::generateMoves(unsigned char color, int& moveBufIndex, BitMap freeSqua
 				unsigned int to = firstOne(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
-				if ((RANKS[to]) == 8)                                       // add promotions
+				if ((RANKS[to]) == 8) // add promotions
 				{
-					move.setProm(WHITE_QUEEN);   board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
-					move.setProm(WHITE_ROOK);    board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
-					move.setProm(WHITE_BISHOP);  board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
-					move.setProm(WHITE_KNIGHT);  board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					move.setProm(WHITE_QUEEN);   board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
+					move.setProm(WHITE_ROOK);    board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
+					move.setProm(WHITE_BISHOP);  board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
+					move.setProm(WHITE_KNIGHT);  board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
 					move.setProm(EMPTY);
 				}
 				else
 				{
-					board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
 				}
 				tempMove ^= BITSET[to];
 			}
@@ -227,7 +226,7 @@ void Pawn::generateMoves(unsigned char color, int& moveBufIndex, BitMap freeSqua
 					move.setProm(WHITE_PAWN);
 					move.setCapt(BLACK_PAWN);
 					move.setTosq(board.epSquare);
-					board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
+					board.moveBuffer[(*moveBufIndex)++].bitfield = move.bitfield;
 				}
 			}
 			tempPiece ^= BITSET[from];

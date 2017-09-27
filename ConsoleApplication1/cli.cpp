@@ -296,12 +296,14 @@ bool CLI::doCommand(const char *buf)
 		sscanf(buf + 4, "%s", userinput);
 
 		// generate the pseudo-legal move list
+
+		// ISSUE WITH PROMOTION IS HERE
+
 		board.moveBufLen[0] = 0;
 		board.moveBufLen[1] = movegen(board.moveBufLen[0]);
 
 		if (isValidTextMove(userinput, move))        // check to see if the user move is also found in the pseudo-legal move list
 		{
-			//cout << endl << endl << move.getProm() << endl << endl;
 			makeMove(move);
 
 			if (isOtherKingAttacked())              // post-move check to see if we are leaving our king in check
