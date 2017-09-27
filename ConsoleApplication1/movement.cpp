@@ -636,6 +636,7 @@ void Move::setCapt(unsigned int capt)
 
 void Move::setProm(unsigned int prom)
 {   // bits 20..23
+	std::cout << prom <<std::endl;
 	bitfield &= 0xff0fffff; bitfield |= (prom & 0x0000000f) << 20;
 }
 
@@ -1182,11 +1183,12 @@ void makeMove(Move &move)
 		}
 		else board.occupiedSquares ^= fromToBitMap;
 
-		/*if (move.isPromotion())
+		if (move.isPromotion())
 		{
 			makeWhitePromotion(move.getProm(), to);
 			board.square[to] = move.getProm();
-		}*/
+			std::cout << move.getProm() << std::endl;
+		}
 		
 		break;
 
@@ -2012,7 +2014,7 @@ bool isValidTextMove(char *userMove, Move &move)
 	// Checks if userMove is valid by comparing it with moves from the move generator
 	// If found valid, the move is returned
 
-	unsigned char userFrom = 0, userTo, userPromote;
+	unsigned char userFrom = 0, userTo = 0, userPromote;
 	bool moveFound;
 	int i;
 
@@ -2023,7 +2025,7 @@ bool isValidTextMove(char *userMove, Move &move)
 		userTo = userMove[2] - 97;
 		userTo += 8 * (userMove[3] - 49);
 	}
-
+	
 	userPromote = 0;
 	if (strlen(userMove) > 4)
 	{
@@ -2046,7 +2048,7 @@ bool isValidTextMove(char *userMove, Move &move)
 			case 'n': userPromote = BLACK_KNIGHT; break;
 			}
 	}
-
+	
 	moveFound = false;
 	for (i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
 	{

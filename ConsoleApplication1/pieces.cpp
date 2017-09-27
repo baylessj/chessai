@@ -1,5 +1,6 @@
 #include "pieces.h"
 #include "board.h"
+#include <iostream>
 
 // Identifier of next move:
 extern const unsigned char WHITE_MOVE = 0;
@@ -160,6 +161,7 @@ void Pawn::generateMoves(unsigned char color, int& moveBufIndex, BitMap freeSqua
 				move.setCapt(board.square[to]);
 				if ((RANKS[to]) == 1)  // add promotions
 				{
+					std::cout << "here";
 					move.setProm(BLACK_QUEEN);   board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
 					move.setProm(BLACK_ROOK);    board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;
 					move.setProm(BLACK_BISHOP);  board.moveBuffer[moveBufIndex++].bitfield = move.bitfield;

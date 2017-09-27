@@ -141,6 +141,7 @@ static void displayMove(Move &move)
 bool CLI::doCommand(const char *buf)
 {
 	Move move;
+	move.clear();
 	Timer timer;
 	unsigned long long msStart;
 	unsigned long long msStop;
@@ -183,7 +184,7 @@ bool CLI::doCommand(const char *buf)
 		CMD_BUFF_COUNT = '\0';
 		return true;
 	}
-
+	
 	// Black to Move
 	if (!strcmp(buf, "black"))
 	{
@@ -265,6 +266,28 @@ bool CLI::doCommand(const char *buf)
 	}
 
 	//     =================================================================
+	//  game: show game moves
+	//     =================================================================
+	if (!strcmp(buf, "game"))
+	{
+		if (board.endOfGame)
+		{
+			for (int i = 0; i < board.endOfGame; i++)
+			{
+				cout << i + 1 << ". ";
+				displayMove(board.gameLine[i].move);
+				cout << endl;
+			}
+		}
+		else
+		{
+			cout << "there are no game moves" << endl;
+		}
+		CMD_BUFF_COUNT = '\0';
+		return true;
+	}
+
+	//     =================================================================
 	//  move (do a move) [console mode only]
 	//     =================================================================
 
@@ -278,6 +301,7 @@ bool CLI::doCommand(const char *buf)
 
 		if (isValidTextMove(userinput, move))        // check to see if the user move is also found in the pseudo-legal move list
 		{
+			//cout << endl << endl << move.getProm() << endl << endl;
 			makeMove(move);
 
 			if (isOtherKingAttacked())              // post-move check to see if we are leaving our king in check
