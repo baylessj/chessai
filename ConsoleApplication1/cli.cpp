@@ -296,9 +296,6 @@ bool CLI::doCommand(const char *buf)
 		sscanf(buf + 4, "%s", userinput);
 
 		// generate the pseudo-legal move list
-
-		// ISSUE WITH PROMOTION IS HERE
-
 		board.moveBufLen[0] = 0;
 		board.moveBufLen[1] = movegen(board.moveBufLen[0]);
 

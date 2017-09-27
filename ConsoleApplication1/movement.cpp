@@ -1051,11 +1051,7 @@ int movegen(int index)
 			move.setProm(EMPTY);
 		}
 	}
-	for (int i = 0; i < index; i++) {
-		if (board.moveBuffer[i].getProm() != 0)
-		std::cout << i << std::endl;
-		// 0 and 1 moves are borked
-	}
+
 	return index;
 }
 
