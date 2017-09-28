@@ -14,10 +14,10 @@ public:
 	CLI();
 	bool doCommand(const char *);
 	void readCommands();
-	//void dataInit();
 	void info();
 	void setup();
 private:
+	void init();
 	static const int MAX_CMD_BUFF = 256; // Console command input buffer
 	char CMD_BUFF[MAX_CMD_BUFF];
 	int CMD_BUFF_COUNT;

@@ -14,7 +14,7 @@ Timer::Timer()
 	stopTimeDelta = 0;
 }
 
-void Timer::init()
+void Timer::start()
 {
 	if (!running)
 	{

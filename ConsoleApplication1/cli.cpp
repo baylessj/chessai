@@ -11,9 +11,9 @@
 using namespace std;
 
 /**
-* @brief Initializes the Command Line Interface
+* @brief Initializes the CLI by initializing bit operation, the board, and move generator
 */
-CLI::CLI() {
+void CLI::init() {
 	CMD_BUFF_COUNT = 0;
 
 	initBitOps();
@@ -21,48 +21,43 @@ CLI::CLI() {
 	board.init();
 
 	movegenInit();
+}
 
+/**
+* @brief Calls the private CLI::init function to construct a CLI instance
+*/
+CLI::CLI() {
+	CLI::init();
 	return;
 }
 
-void CLI::readCommands()
-{
+/**
+* @brief Gathers user input from stdin and parses into commands
+*/
+void CLI::readCommands() {
 	int nextc;
 
 	if (board.nextMove == WHITE_MOVE)
-	{
 		cout << "wt> ";
-	}
 	else
-	{
 		cout << "bl> ";
-	}
 	cout.flush();
 
 	// Read a command
-	while ((nextc = getc(stdin)) != EOF)
-	{
-		if (nextc == '\n')
-		{
+	while ((nextc = getc(stdin)) != EOF) {
+		if (nextc == '\n') {
 			CMD_BUFF[CMD_BUFF_COUNT] = '\0';
-			while (CMD_BUFF_COUNT)
-			{
+			while (CMD_BUFF_COUNT) {
 				if (!doCommand(CMD_BUFF)) return;
 			}
 			if (board.nextMove == WHITE_MOVE)
-			{
 				cout << "wt> ";
-			}
 			else
-			{
 				cout << "bl> ";
-			}
 			cout.flush();
 		}
-		else
-		{
-			if (CMD_BUFF_COUNT >= MAX_CMD_BUFF - 1)
-			{
+		else {
+			if (CMD_BUFF_COUNT >= MAX_CMD_BUFF - 1) {
 				cout << "Warning: command buffer full !! " << endl;
 				CMD_BUFF_COUNT = 0;
 			}
@@ -71,27 +66,26 @@ void CLI::readCommands()
 	}
 }
 
-static void displayMove(Move &move)
-{
-	// displays a single move on the console, no disambiguation
-
-	if ((move.getPiec() == WHITE_KING) && (move.isCastleOO()))
-	{
+/**
+* @brief displays a single move on the console, no disambiguation
+*
+* @param move
+*        The move to display
+*/
+static void displayMove(Move &move) {
+	if ((move.getPiec() == WHITE_KING) && (move.isCastleOO())) {
 		cout << "O-O";
 		return;
 	};
-	if ((move.getPiec() == WHITE_KING) && (move.isCastleOOO()))
-	{
+	if ((move.getPiec() == WHITE_KING) && (move.isCastleOOO())) {
 		cout << "O-O-O";
 		return;
 	};
-	if ((move.getPiec() == BLACK_KING) && (move.isCastleOO()))
-	{
+	if ((move.getPiec() == BLACK_KING) && (move.isCastleOO())) {
 		cout << "O-O";
 		return;
 	};
-	if ((move.getPiec() == BLACK_KING) && (move.isCastleOOO()))
-	{
+	if ((move.getPiec() == BLACK_KING) && (move.isCastleOOO())) {
 		cout << "O-O-O";
 		return;
 	};
@@ -101,8 +95,7 @@ static void displayMove(Move &move)
 	if ((move.getPiec() == WHITE_KNIGHT) || (move.getPiec() == BLACK_KNIGHT)) cout << "N";
 	if ((move.getPiec() == WHITE_KING) || (move.getPiec() == BLACK_KING))   cout << "K";
 	if ((move.getPiec() == WHITE_QUEEN) || (move.getPiec() == BLACK_QUEEN))  cout << "Q";
-	if (((move.getPiec() == WHITE_PAWN) || (move.getPiec() == BLACK_PAWN)) && move.isCapture())
-	{
+	if (((move.getPiec() == WHITE_PAWN) || (move.getPiec() == BLACK_PAWN)) && move.isCapture()) {
 		if (FILES[move.getFrom()] == 1) cout << "a";
 		if (FILES[move.getFrom()] == 2) cout << "b";
 		if (FILES[move.getFrom()] == 3) cout << "c";
@@ -126,8 +119,7 @@ static void displayMove(Move &move)
 
 	cout << RANKS[move.getTosq()];
 
-	if (move.isPromotion())
-	{
+	if (move.isPromotion()) {
 		if ((move.getProm() == WHITE_ROOK) || (move.getProm() == BLACK_ROOK))   cout << "=R";
 		if ((move.getProm() == WHITE_BISHOP) || (move.getProm() == BLACK_BISHOP)) cout << "=B";
 		if ((move.getProm() == WHITE_KNIGHT) || (move.getProm() == BLACK_KNIGHT)) cout << "=N";
@@ -138,26 +130,17 @@ static void displayMove(Move &move)
 	return;
 }
 
-bool CLI::doCommand(const char *buf)
-{
+bool CLI::doCommand(const char *buf) {
 	Move move;
-	move.clear();
-	Timer timer;
-	unsigned long long msStart;
-	unsigned long long msStop;
-	unsigned long long perftcount;
 	char userinput[80];
-	int number;
 
-	if (!strcmp(buf, ""))
-	{
+	if (!strcmp(buf, "")) {
 		CMD_BUFF_COUNT = '\0';
 		return true; // return when buffer is empty
 	}
 
 	// Help Menu
-	if ((!strcmp(buf, "help")) || (!strcmp(buf, "h")) || (!strcmp(buf, "?")))
-	{
+	if ((!strcmp(buf, "help")) || (!strcmp(buf, "h")) || (!strcmp(buf, "?"))) {
 		cout << endl << "help:" << endl;
 		cout << "black               : BLACK to move" << endl;
 		cout << "cc                  : play computer-to-computer " << endl;
@@ -186,75 +169,58 @@ bool CLI::doCommand(const char *buf)
 	}
 	
 	// Black to Move
-	if (!strcmp(buf, "black"))
-	{
+	if (!strcmp(buf, "black")) {
 		board.nextMove = BLACK_MOVE;
 		CMD_BUFF_COUNT = '\0';
 		return true;
 	}
 
 	// Display Board
-	if (!strcmp(buf, "d"))
-	{
+	if (!strcmp(buf, "d")) {
 		board.display();
 		CMD_BUFF_COUNT = '\0';
 		return true;
 	}
 
 	// Exit Program
-	if ((!strcmp(buf, "exit")) || (!strcmp(buf, "quit")))
-	{
+	if ((!strcmp(buf, "exit")) || (!strcmp(buf, "quit"))) {
 		CMD_BUFF_COUNT = '\0';
 		return false;
 	}
 
 	// Debug info
-	if (!strcmp(buf, "info"))
-	{
+	if (!strcmp(buf, "info")) {
 		info();
 		CMD_BUFF_COUNT = '\0';
 		return true;
 	}
 
-	//     =================================================================
-	//  game: show game moves
-	//     =================================================================
-	if (!strcmp(buf, "game"))
-	{
-		if (board.endOfGame)
-		{
-			for (int i = 0; i < board.endOfGame; i++)
-			{
+	// Show Past Game Moves
+	if (!strcmp(buf, "game")) {
+		if (board.endOfGame) {
+			for (int i = 0; i < board.endOfGame; i++) {
 				cout << i + 1 << ". ";
 				displayMove(board.gameLine[i].move);
 				cout << endl;
 			}
 		}
 		else
-		{
 			cout << "there are no game moves" << endl;
-		}
+
 		CMD_BUFF_COUNT = '\0';
 		return true;
 	}
 
-	//     =================================================================
-	//  moves: show all legal moves
-	//     =================================================================
-	if (!strcmp(buf, "moves"))
-	{
+	// Show all legal moves
+	if (!strcmp(buf, "moves")) {
 		board.moveBufLen[0] = 0;
 		board.moveBufLen[1] = movegen(board.moveBufLen[0]);
 		cout << endl << "moves from this position:" << endl;
-		for (int i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++)
-		{
+		for (int i = board.moveBufLen[0]; i < board.moveBufLen[1]; i++) {
 			makeMove(board.moveBuffer[i]);
 			if (isOtherKingAttacked())
-			{
 				unmakeMove(board.moveBuffer[i]);
-			}
-			else
-			{
+			else {
 				cout << i + 1 << ". ";
 				displayMove(board.moveBuffer[i]);
 				cout << endl;
@@ -265,115 +231,52 @@ bool CLI::doCommand(const char *buf)
 		return true;
 	}
 
-	//     =================================================================
-	//  game: show game moves
-	//     =================================================================
-	if (!strcmp(buf, "game"))
-	{
-		if (board.endOfGame)
-		{
-			for (int i = 0; i < board.endOfGame; i++)
-			{
-				cout << i + 1 << ". ";
-				displayMove(board.gameLine[i].move);
-				cout << endl;
-			}
-		}
-		else
-		{
-			cout << "there are no game moves" << endl;
-		}
-		CMD_BUFF_COUNT = '\0';
-		return true;
-	}
-
-	//     =================================================================
-	//  move (do a move) [console mode only]
-	//     =================================================================
-
-	if (!strncmp(buf, "move", 4))
-	{
+	// Make a Move (Console Mode only)
+	if (!strncmp(buf, "move", 4)) {
 		sscanf(buf + 4, "%s", userinput);
 
 		// generate the pseudo-legal move list
 		board.moveBufLen[0] = 0;
 		board.moveBufLen[1] = movegen(board.moveBufLen[0]);
 
-		if (isValidTextMove(userinput, move))        // check to see if the user move is also found in the pseudo-legal move list
-		{
+		// check to see if the user move is also found in the pseudo-legal move list 
+		if (isValidTextMove(userinput, move)) {       
 			makeMove(move);
 
-			if (isOtherKingAttacked())              // post-move check to see if we are leaving our king in check
-			{
+			// post-move check to see if we are leaving our king in check
+			if (isOtherKingAttacked()) {
 				unmakeMove(move);
 				cout << "    invalid move, leaving king in check: " << userinput << endl;
 			}
-			else
-			{
+			else {
 				board.endOfGame++;
 				board.endOfSearch = board.endOfGame;
 				board.display();
 			}
 		}
 		else
-		{
 			cout << "    move is invalid or not recognized: " << userinput << endl;
-		}
+
 		CMD_BUFF_COUNT = '\0';
 		return true;
 	}
 
 	// New Game
-	if (!strcmp(buf, "new"))
-	{
-		BITSET[0] = 0x1;
-		for (int i = 1; i < 64; i++)
-		{
-			BITSET[i] = BITSET[i - 1] << 1;
-		}
-
-		//     ===========================================================================
-		//     BOARDINDEX is used to translate [file][rank] to [square],
-		//  Note that file is from 1..8 and rank from 1..8 (not starting from 0)
-		//     ===========================================================================
-		for (int rank = 0; rank < 9; rank++)
-		{
-			for (int file = 0; file < 9; file++)
-			{
-				BOARDINDEX[file][rank] = (rank - 1) * 8 + file - 1;
-			}
-		}
-
-		board.init();
-
-		//     ===========================================================================
-		//     Initialize MS1BTABLE, used in lastOne (see bitops.cpp)
-		//     ===========================================================================
-		for (int i = 0; i < 256; i++)
-		{
-			MS1BTABLE[i] = (
-				(i > 127) ? 7 :
-				(i >  63) ? 6 :
-				(i >  31) ? 5 :
-				(i >  15) ? 4 :
-				(i >   7) ? 3 :
-				(i >   3) ? 2 :
-				(i >   1) ? 1 : 0);
-		}
-
+	if (!strcmp(buf, "new")) {
+		CLI::init();
 		board.display();
 		CMD_BUFF_COUNT = '\0';
 		return true;
 	}
 
-	//     =================================================================
-	//  perft n  : calculate raw number of nodes from here, depth n
-	//     =================================================================
-	if (!strncmp(buf, "perft", 5))
-	{
+	// perft n: Calculate the raw number of nodes from here
+	if (!strncmp(buf, "perft", 5)) {
+		Timer timer;
+		unsigned long long msStart, msStop, perftcount;
+		int number;
 		sscanf(buf + 5, "%d", &number);
 		cout << "    starting perft " << number << "..." << endl;
-		timer.init();
+		timer.start();
 		board.moveBufLen[0] = 0;
 
 #ifdef WINGLET_DEBUG_PERFT
@@ -406,8 +309,7 @@ bool CLI::doCommand(const char *buf)
 	}
 
 	// Rotate Board
-	if (!strcmp(buf, "r"))
-	{
+	if (!strcmp(buf, "r")) {
 		board.viewRotated = !board.viewRotated;
 		board.display();
 		CMD_BUFF_COUNT = '\0';
@@ -415,8 +317,8 @@ bool CLI::doCommand(const char *buf)
 	}
 
 	// Reads #-th FEN position from filename
-	if (!strncmp(buf, "readfen", 7))
-	{
+	if (!strncmp(buf, "readfen", 7)) {
+		int number;
 		sscanf(buf + 7, "%s %d", userinput, &number);
 		board.init();
 		readFen(userinput, number);
@@ -425,36 +327,29 @@ bool CLI::doCommand(const char *buf)
 		return true;
 	}
 
-	//     =================================================================
-	//  undo: take back last move
-	//     =================================================================
-	if (!strcmp(buf, "undo"))
-	{
-		if (board.endOfGame)
-		{
+	// Undo move
+	if (!strcmp(buf, "undo")) {
+		if (board.endOfGame) {
 			unmakeMove(board.gameLine[--board.endOfGame].move);
 			board.endOfSearch = board.endOfGame;
 			board.display();
 		}
 		else
-		{
 			cout << "already at start of game" << endl;
-		}
+
 		CMD_BUFF_COUNT = '\0';
 		return true;
 	}
 
 	// White to Move
-	if (!strcmp(buf, "white"))
-	{
+	if (!strcmp(buf, "white")) {
 		board.nextMove = WHITE_MOVE;
 		CMD_BUFF_COUNT = '\0';
 		return true;
 	}
 
 	// Board Setup
-	if (!strncmp(buf, "setup", 5))
-	{
+	if (!strncmp(buf, "setup", 5)) {
 		setup();
 		CMD_BUFF_COUNT = '\0';
 		return true;
