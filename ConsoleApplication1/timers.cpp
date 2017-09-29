@@ -6,6 +6,9 @@
 
 #pragma warning (disable: 4244)
 
+/**
+* @brief Constructs a timer object
+*/
 Timer::Timer()
 {
 	running = false;
@@ -14,6 +17,9 @@ Timer::Timer()
 	stopTimeDelta = 0;
 }
 
+/**
+* @brief Starts an existing timer object
+*/
 void Timer::start()
 {
 	if (!running)
@@ -25,6 +31,9 @@ void Timer::start()
 	return;
 }
 
+/**
+* @brief Stops an existing timer object
+*/
 void Timer::stop()
 {
 	if (running)
@@ -37,6 +46,9 @@ void Timer::stop()
 	return;
 }
 
+/**
+* @brief Resets a timer object
+*/
 void Timer::reset()
 {
 	if (running)
@@ -52,6 +64,9 @@ void Timer::reset()
 	return;
 }
 
+/**
+* @brief Displays the time in seconds with 2 decimal places
+*/
 void Timer::display()
 {
 	if (running)
@@ -65,6 +80,9 @@ void Timer::display()
 	return;
 }
 
+/**
+* @brief Displays the time in hh:mm:ss.dd
+*/
 void Timer::displayhms()
 {
 	int hh, mm, ss;
@@ -87,6 +105,9 @@ void Timer::displayhms()
 	return;
 }
 
+/**
+* @brief Returns the number of milliseconds since the timer was started
+*/
 unsigned long long Timer::getms()
 {
 	if (running)
@@ -99,34 +120,59 @@ unsigned long long Timer::getms()
 		return (stopTime - startTime);
 }
 
+/**
+* @brief Returns the system time in milliseconds
+*/
 unsigned long long Timer::getsysms()
 {
 	ftime(&currentBuffer);
 	return (currentBuffer.time * 1000 + currentBuffer.millitm);
 }
 
-unsigned long long perft(int ply, int depth)
-{
-
-	// Raw node count, up to depth, doing a full tree search.
-	// perft is very similar to the search algorithm - instead of evaluating the leaves, we count them.
-	//
-	// Be carefull when calling this function with depths > 7, because it can take a very long
-	// time before the result is returned: the average branching factor in chess is 35, so every
-	// increment in depth will require 35x more computer time.
-	//
-	// perft is a good way of verifying correctness of the movegenerator and (un)makeMove,
-	// because you can compare the results with published results for certain test positions.
-	//
-	// perft is also used to measure the performance of the move generator and (un)makeMove in terms
-	// of speed, and to compare different implementations of generating, storing and (un)making moves.
-
+/**
+* @brief Runs a test of the engine, computing a node count and the time to do the computation
+*        Raw node count, up to depth, doing a full tree search.
+*        perft is very similar to the search algorithm - instead of evaluating the leaves, we count them.
+*
+*        Be careful when calling this function with depths > 7, because it can take a very long
+*        time before the result is returned: the average branching factor in chess is 35, so every
+*        increment in depth will require 35x more computer time.
+*
+*        perft is a good way of verifying correctness of the movegenerator and (un)makeMove,
+*        because you can compare the results with published results for certain test positions.
+*
+*        perft is also used to measure the performance of the move generator and (un)makeMove in terms
+*        of speed, and to compare different implementations of generating, storing and (un)making moves.
+*
+* @param ply
+*        The search depth
+* @param depth
+*        Node depth to evaluate to
+*
+* @return The number of nodes found
+*/
+unsigned long long perft(int ply, int depth) {
 	unsigned long long retVal = 0;
-	int i;
 
 	// count this node
-	if (depth == 0)
-	{
+	if (depth == 0) {
+#ifdef WINGLET_DEBUG_EVAL
+		int before = board.eval();
+		board.mirror();
+		int after = board.eval();
+		board.mirror();
+		if (before != after)
+		{
+			std::cout << "evaluation is not symmetrical! " << before << std::endl;
+			for (int j = 0; j < board.endOfSearch; j++)
+			{
+				std::cout << j + 1 << ". ";
+				displayMove(board.gameLine[j].move);
+				std::cout << std::endl;
+			}
+			board.display();
+		}
+#endif
 		return 1;
 	}
 
@@ -134,12 +180,10 @@ unsigned long long perft(int ply, int depth)
 	board.moveBufLen[ply + 1] = movegen(board.moveBufLen[ply]);
 
 	// loop over moves:
-	for (i = board.moveBufLen[ply]; i < board.moveBufLen[ply + 1]; i++)
-	{
+	for (int i = board.moveBufLen[ply]; i < board.moveBufLen[ply + 1]; i++) {
 		makeMove(board.moveBuffer[i]);
 		{
-			if (!isOtherKingAttacked())
-			{
+			if (!isOtherKingAttacked()) {
 				// recursively call perft
 				retVal += perft(ply + 1, depth - 1);
 

@@ -269,9 +269,26 @@ bool CLI::doCommand(const char *buf) {
 		return true;
 	}
 
+	// Evaluate the board
+	if (!strcmp(buf, "eval")) {
+		int number = board.eval();
+		cout << "eval score = " << number << std::endl;
+#ifdef WINGLET_DEBUG_EVAL
+		board.mirror();
+		board.display();
+		i = board.eval();
+		std::cout << "eval score = " << i << std::endl;
+		board.mirror();
+		if (number != i) std::cout << "evaluation is not symmetrical! " << number << std::endl;
+		else std::cout << "evaluation is symmetrical" << std::endl;
+#endif
+		CMD_BUFF_COUNT = '\0';
+		return true;
+	}
+
 	// New Game
 	if (!strcmp(buf, "new")) {
-		CLI::init();
+		init();
 		board.display();
 		CMD_BUFF_COUNT = '\0';
 		return true;
@@ -382,7 +399,7 @@ void CLI::info()
 	cout << "White castling rights     = " << int(board.castleWhite) << endl;
 	cout << "Black castling rights     = " << int(board.castleBlack) << endl;
 	cout << "En-passant square         = " << board.epSquare << endl;
-	cout << "Fifty move count          = " << board.fiftyMove << endl;
+	cout << "Fifty move count          = " << board.movesSincePawn << endl;
 
 	cout << "bitCnt of white pawns     = " << bitCnt(board.whitePawns) << endl;
 	cout << endl << "bitmap of blackKnights | board.whitePawns:" << endl;
@@ -415,7 +432,7 @@ void CLI::setup()
 	whiteCastle = board.castleWhite;
 	blackCastle = board.castleBlack;
 	next = board.nextMove;
-	halfmoves = board.fiftyMove;
+	halfmoves = board.movesSincePawn;
 	epsq = board.epSquare;
 
 	if (board.nextMove == WHITE_MOVE)
@@ -505,7 +522,7 @@ void CLI::setup()
 		{
 			board.display();
 			cout << "  castleWhite = " << (int)board.castleWhite << " castleBlack = " << (int)board.castleBlack << " epSquare = "
-				<< board.epSquare << " fiftyMove = " << board.fiftyMove << endl << endl;
+				<< board.epSquare << " fiftyMove = " << board.movesSincePawn << endl << endl;
 		}
 
 		else if (!strncmp(s, "epsq", 4))

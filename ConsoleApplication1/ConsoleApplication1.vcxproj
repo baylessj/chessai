@@ -162,6 +162,7 @@
     <ClInclude Include="bitops.h" />
     <ClInclude Include="cli.h" />
     <ClInclude Include="board.h" />
+    <ClInclude Include="eval.h" />
     <ClInclude Include="hash.h" />
     <ClInclude Include="movement.h" />
     <ClInclude Include="pieces.h" />

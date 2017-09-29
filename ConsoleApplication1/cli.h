@@ -2,9 +2,13 @@
 
 #define ENGINE_VERSION "Welcome to bayless's Chess AI CLI (v0.1)" 
 
+//#define WINGLET_DEBUG_PERF
+//#define WINGLET_DEBUG_MOVES
+#define WINGLET_VERBOSE_EVAL
+//#define WINGLET_DEBUG_EVAL
+
 class FEN {
 public:
-	//bool readfen();
 	bool readFen(char *, int);
 	static void setupFen(char *, char *, char *, char *, int, int);
 };
@@ -12,10 +16,11 @@ public:
 class CLI: public FEN {
 public:
 	CLI();
-	bool doCommand(const char *);
+	
 	void readCommands();
 
 private:
+	bool doCommand(const char *);
 	void setup();
 	void info();
 	void init();

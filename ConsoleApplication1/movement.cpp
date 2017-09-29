@@ -1151,7 +1151,7 @@ void makeMove(Move &move)
 	board.gameLine[board.endOfSearch].move.bitfield = move.bitfield;
 	board.gameLine[board.endOfSearch].castleWhite = board.castleWhite;
 	board.gameLine[board.endOfSearch].castleBlack = board.castleBlack;
-	board.gameLine[board.endOfSearch].fiftyMove = board.fiftyMove;
+	board.gameLine[board.endOfSearch].movesSincePawn = board.movesSincePawn;
 	board.gameLine[board.endOfSearch].epSquare = board.epSquare;
 	board.endOfSearch++;
 
@@ -1163,7 +1163,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = WHITE_PAWN;
 		board.epSquare = 0;
-		board.fiftyMove = 0;
+		board.movesSincePawn = 0;
 		if (RANKS[from] == 2)
 			if (RANKS[to] == 4) board.epSquare = from + 8;
 		if (captured)
@@ -1198,7 +1198,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = WHITE_KING;
 		board.epSquare = 0;
-		board.fiftyMove++;
+		board.movesSincePawn++;
 		board.castleWhite = 0;
 		if (captured)
 		{
@@ -1234,7 +1234,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = WHITE_KNIGHT;
 		board.epSquare = 0;
-		board.fiftyMove++;
+		board.movesSincePawn++;
 		if (captured)
 		{
 			makeCapture(captured, to);
@@ -1249,7 +1249,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = WHITE_BISHOP;
 		board.epSquare = 0;
-		board.fiftyMove++;
+		board.movesSincePawn++;
 		if (captured)
 		{
 			makeCapture(captured, to);
@@ -1264,7 +1264,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = WHITE_ROOK;
 		board.epSquare = 0;
-		board.fiftyMove++;
+		board.movesSincePawn++;
 		if (from == A1) board.castleWhite &= ~CANCASTLEOOO;
 		if (from == H1) board.castleWhite &= ~CANCASTLEOO;
 		if (captured)
@@ -1281,7 +1281,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = WHITE_QUEEN;
 		board.epSquare = 0;
-		board.fiftyMove++;
+		board.movesSincePawn++;
 		if (captured)
 		{
 			makeCapture(captured, to);
@@ -1296,7 +1296,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = BLACK_PAWN;
 		board.epSquare = 0;
-		board.fiftyMove = 0;
+		board.movesSincePawn = 0;
 		if (RANKS[from] == 7)
 			if (RANKS[to] == 5) board.epSquare = from - 8;
 		if (captured)
@@ -1330,7 +1330,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = BLACK_KING;
 		board.epSquare = 0;
-		board.fiftyMove++;
+		board.movesSincePawn++;
 		board.castleBlack = 0;
 		if (captured)
 		{
@@ -1366,7 +1366,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = BLACK_KNIGHT;
 		board.epSquare = 0;
-		board.fiftyMove++;
+		board.movesSincePawn++;
 		if (captured)
 		{
 			makeCapture(captured, to);
@@ -1381,7 +1381,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = BLACK_BISHOP;
 		board.epSquare = 0;
-		board.fiftyMove++;
+		board.movesSincePawn++;
 		if (captured)
 		{
 			makeCapture(captured, to);
@@ -1396,7 +1396,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = BLACK_ROOK;
 		board.epSquare = 0;
-		board.fiftyMove++;
+		board.movesSincePawn++;
 		if (from == A8) board.castleBlack &= ~CANCASTLEOOO;
 		if (from == H8) board.castleBlack &= ~CANCASTLEOO;
 		if (captured)
@@ -1413,7 +1413,7 @@ void makeMove(Move &move)
 		board.square[from] = EMPTY;
 		board.square[to] = BLACK_QUEEN;
 		board.epSquare = 0;
-		board.fiftyMove++;
+		board.movesSincePawn++;
 		if (captured)
 		{
 			makeCapture(captured, to);
@@ -1676,7 +1676,7 @@ void unmakeMove(Move &move)
 	board.castleWhite = board.gameLine[board.endOfSearch].castleWhite;
 	board.castleBlack = board.gameLine[board.endOfSearch].castleBlack;
 	board.epSquare = board.gameLine[board.endOfSearch].epSquare;
-	board.fiftyMove = board.gameLine[board.endOfSearch].fiftyMove;
+	board.movesSincePawn = board.gameLine[board.endOfSearch].movesSincePawn;
 
 	board.nextMove = !board.nextMove;
 
@@ -1768,7 +1768,7 @@ void makeCapture(unsigned int &captured, unsigned int &to)
 		board.Material += QUEEN_VALUE;
 		break;
 	}
-	board.fiftyMove = 0;
+	board.movesSincePawn = 0;
 }
 
 void unmakeCapture(unsigned int &captured, unsigned int &to)

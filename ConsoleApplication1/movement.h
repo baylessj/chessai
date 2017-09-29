@@ -9,9 +9,7 @@ void movegenInit();
 
 class Move {
 public:
-	Move() {
-		this->clear();
-	}
+	Move() { this->clear(); }
 	void set(unsigned int piece, unsigned int captured, unsigned int from, unsigned int to, unsigned int promote);
 	void setFrom(unsigned int from);
 	void setTosq(unsigned int tosq);
@@ -62,14 +60,15 @@ void unmakeWhitePromotion(unsigned int, unsigned int &);
 
 #define MAX_GAME_LINE 4096
 
-struct GameLineRecord
-{
+struct GameLineRecord {
 	Move move;
 	unsigned char castleWhite;     // White's castle status, CANCASTLEOO = 1, CANCASTLEOOO = 2
 	unsigned char castleBlack;     // Black's castle status, CANCASTLEOO = 1, CANCASTLEOOO = 2
 	int epSquare;                  // En-passant target square after double pawn move
-	int fiftyMove;                 // Moves since the last pawn move or capture
+	int movesSincePawn;                 // Moves since the last pawn move or capture
 };
+
+// Bitfield Stuff
 
 extern BitMap WHITE_PAWN_ATTACKS[];
 extern BitMap WHITE_PAWN_MOVES[];
