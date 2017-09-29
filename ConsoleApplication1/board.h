@@ -60,3 +60,5 @@ extern const char* SQUARENAME[];
 
 extern const int FILES[];
 extern const int RANKS[];
+
+extern int BOARDINDEX[9][9];

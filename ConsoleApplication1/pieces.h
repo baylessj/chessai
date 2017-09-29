@@ -22,9 +22,6 @@ extern const unsigned char BLACK_QUEEN;
 
 extern const char* PIECENAMES[];
 
-extern BitMap BITSET[];
-extern int BOARDINDEX[9][9];
-
 extern const int PAWN_VALUE;
 extern const int KNIGHT_VALUE;
 extern const int BISHOP_VALUE;

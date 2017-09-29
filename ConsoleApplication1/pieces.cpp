@@ -30,9 +30,6 @@ extern const unsigned char BLACK_QUEEN = 15;         //  1111
 const char* PIECENAMES[16] = { "  ","P ","K ","N ","  ","B ","R ","Q ",
 "  ","P*","K*","N*","  ","B*","R*","Q*" };
 
-BitMap BITSET[64];
-int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
-
 // Value of material, in centipawns:
 extern const int PAWN_VALUE = 100;
 extern const int KNIGHT_VALUE = 300;
@@ -57,10 +54,10 @@ void Knight::generateMoves() {
 	unsigned int from, to, capt;
 	int i = 0;
 	while (tempPiece) {
-		from = firstOne(tempPiece);
+		from = ls1b(tempPiece);
 		BitMap tempMove = attacks[from] & target;
 		while (tempMove) {
-			to = firstOne(tempMove);
+			to = ls1b(tempMove);
 			capt = board.square[to];
 
 			Move move;
@@ -148,7 +145,7 @@ void Pawn::generateMoves(unsigned char color, int* moveBufIndex, BitMap freeSqua
 		BitMap tempPiece = board.blackPawns;
 		while (tempPiece)
 		{
-			unsigned int from = firstOne(tempPiece);
+			unsigned int from = ls1b(tempPiece);
 			move.setFrom(from);
 			BitMap tempMove = BLACK_PAWN_MOVES[from] & freeSquares;                // normal moves
 			if (RANKS[from] == 7 && tempMove)
@@ -156,7 +153,7 @@ void Pawn::generateMoves(unsigned char color, int* moveBufIndex, BitMap freeSqua
 			tempMove |= BLACK_PAWN_ATTACKS[from] & board.whitePieces;       // add captures
 			while (tempMove)
 			{
-				unsigned int to = firstOne(tempMove);
+				unsigned int to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				if ((RANKS[to]) == 1)  // add promotions
@@ -193,7 +190,7 @@ void Pawn::generateMoves(unsigned char color, int* moveBufIndex, BitMap freeSqua
 		BitMap tempPiece = board.whitePawns;
 		while (tempPiece)
 		{
-			unsigned int from = firstOne(tempPiece);
+			unsigned int from = ls1b(tempPiece);
 			move.setFrom(from);
 			BitMap tempMove = WHITE_PAWN_MOVES[from] & freeSquares;                // normal moves
 			if (RANKS[from] == 2 && tempMove)
@@ -201,7 +198,7 @@ void Pawn::generateMoves(unsigned char color, int* moveBufIndex, BitMap freeSqua
 			tempMove |= WHITE_PAWN_ATTACKS[from] & board.blackPieces;       // add captures
 			while (tempMove)
 			{
-				unsigned int to = firstOne(tempMove);
+				unsigned int to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				if ((RANKS[to]) == 8) // add promotions

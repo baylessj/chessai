@@ -786,12 +786,12 @@ int movegen(int index)
 		tempPiece = board.blackKnights;
 		while (tempPiece)
 		{
-			from = firstOne(tempPiece);
+			from = ls1b(tempPiece);
 			move.setFrom(from);
 			tempMove = KNIGHT_ATTACKS[from] & targetBitmap;
 			while (tempMove)
 			{
-				to = firstOne(tempMove);
+				to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				board.moveBuffer[index++].bitfield = move.bitfield;
@@ -807,12 +807,12 @@ int movegen(int index)
 		tempPiece = board.blackBishops;
 		while (tempPiece)
 		{
-			from = firstOne(tempPiece);
+			from = ls1b(tempPiece);
 			move.setFrom(from);
 			tempMove = BISHOPMOVES(from);   // see Macro's
 			while (tempMove)
 			{
-				to = firstOne(tempMove);
+				to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				board.moveBuffer[index++].bitfield = move.bitfield;
@@ -828,12 +828,12 @@ int movegen(int index)
 		tempPiece = board.blackRooks;
 		while (tempPiece)
 		{
-			from = firstOne(tempPiece);
+			from = ls1b(tempPiece);
 			move.setFrom(from);
 			tempMove = ROOKMOVES(from);   // see Macro's
 			while (tempMove)
 			{
-				to = firstOne(tempMove);
+				to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				board.moveBuffer[index++].bitfield = move.bitfield;
@@ -849,12 +849,12 @@ int movegen(int index)
 		tempPiece = board.blackQueens;
 		while (tempPiece)
 		{
-			from = firstOne(tempPiece);
+			from = ls1b(tempPiece);
 			move.setFrom(from);
 			tempMove = QUEENMOVES(from);   // see Macro's
 			while (tempMove)
 			{
-				to = firstOne(tempMove);
+				to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				board.moveBuffer[index++].bitfield = move.bitfield;
@@ -870,12 +870,12 @@ int movegen(int index)
 		tempPiece = board.blackKing;
 		while (tempPiece)
 		{
-			from = firstOne(tempPiece);
+			from = ls1b(tempPiece);
 			move.setFrom(from);
 			tempMove = KING_ATTACKS[from] & targetBitmap;
 			while (tempMove)
 			{
-				to = firstOne(tempMove);
+				to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				board.moveBuffer[index++].bitfield = move.bitfield;
@@ -928,12 +928,12 @@ int movegen(int index)
 		tempPiece = board.whiteKnights;
 		while (tempPiece)
 		{
-			from = firstOne(tempPiece);
+			from = ls1b(tempPiece);
 			move.setFrom(from);
 			tempMove = KNIGHT_ATTACKS[from] & targetBitmap;
 			while (tempMove)
 			{
-				to = firstOne(tempMove);
+				to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				board.moveBuffer[index++].bitfield = move.bitfield;
@@ -949,12 +949,12 @@ int movegen(int index)
 		tempPiece = board.whiteBishops;
 		while (tempPiece)
 		{
-			from = firstOne(tempPiece);
+			from = ls1b(tempPiece);
 			move.setFrom(from);
 			tempMove = BISHOPMOVES(from);   // see Macro's
 			while (tempMove)
 			{
-				to = firstOne(tempMove);
+				to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				board.moveBuffer[index++].bitfield = move.bitfield;
@@ -970,12 +970,12 @@ int movegen(int index)
 		tempPiece = board.whiteRooks;
 		while (tempPiece)
 		{
-			from = firstOne(tempPiece);
+			from = ls1b(tempPiece);
 			move.setFrom(from);
 			tempMove = ROOKMOVES(from);   // see Macro's
 			while (tempMove)
 			{
-				to = firstOne(tempMove);
+				to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				board.moveBuffer[index++].bitfield = move.bitfield;
@@ -991,12 +991,12 @@ int movegen(int index)
 		tempPiece = board.whiteQueens;
 		while (tempPiece)
 		{
-			from = firstOne(tempPiece);
+			from = ls1b(tempPiece);
 			move.setFrom(from);
 			tempMove = QUEENMOVES(from);   // see Macro's
 			while (tempMove)
 			{
-				to = firstOne(tempMove);
+				to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				board.moveBuffer[index++].bitfield = move.bitfield;
@@ -1012,12 +1012,12 @@ int movegen(int index)
 		tempPiece = board.whiteKing;
 		while (tempPiece)
 		{
-			from = firstOne(tempPiece);
+			from = ls1b(tempPiece);
 			move.setFrom(from);
 			tempMove = KING_ATTACKS[from] & targetBitmap;
 			while (tempMove)
 			{
-				to = firstOne(tempMove);
+				to = ls1b(tempMove);
 				move.setTosq(to);
 				move.setCapt(board.square[to]);
 				board.moveBuffer[index++].bitfield = move.bitfield;
@@ -1077,7 +1077,7 @@ bool isAttacked(BitMap &targetBitmap, const unsigned char &fromSide)
 	{
 		while (tempTarget)
 		{
-			to = firstOne(tempTarget);
+			to = ls1b(tempTarget);
 
 			if (board.blackPawns & WHITE_PAWN_ATTACKS[to]) return true;
 			if (board.blackKnights & KNIGHT_ATTACKS[to]) return true;
@@ -1106,7 +1106,7 @@ bool isAttacked(BitMap &targetBitmap, const unsigned char &fromSide)
 	{
 		while (tempTarget)
 		{
-			to = firstOne(tempTarget);
+			to = ls1b(tempTarget);
 
 			if (board.whitePawns & BLACK_PAWN_ATTACKS[to]) return true;
 			if (board.whiteKnights & KNIGHT_ATTACKS[to]) return true;

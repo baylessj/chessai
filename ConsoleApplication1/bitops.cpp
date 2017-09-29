@@ -3,24 +3,22 @@
 #include "cli.h"
 #include "bitops.h"
 #include "board.h"
-#include "pieces.h"
 
 // used in Eugene Nalimov's bitScanReverse
 int MS1BTABLE[256];
 
+BitMap BITSET[64];
+
+/**
+* @brief Initializes the BITSET and MS1BTABLE
+*/
 void initBitOps() {
 	// BITSET has only one bitset
 	BITSET[0] = 0x1;
-	for (int i = 1; i < 64; i++)
-	{
-		BITSET[i] = BITSET[i - 1] << 1;
-	}
+	for (int i = 1; i < 64; i++) BITSET[i] = BITSET[i - 1] << 1;
 
-	//     ===========================================================================
-	//     Initialize MS1BTABLE, used in lastOne (see bitops.cpp)
-	//     ===========================================================================
-	for (int i = 0; i < 256; i++)
-	{
+	// Initialize MS1BTABLE, used in ms1b
+	for (int i = 0; i < 256; i++) {
 		MS1BTABLE[i] = (
 			(i > 127) ? 7 :
 			(i >  63) ? 6 :
@@ -32,11 +30,16 @@ void initBitOps() {
 	}
 }
 
-unsigned int bitCnt(BitMap bitmap)
-{
-
-	// MIT HAKMEM algorithm, see http://graphics.stanford.edu/~seander/bithacks.html
-
+/**
+* @brief Implements the MIT HAKMEM algorithm to find the bit count
+*        http://graphics.stanford.edu/~seander/bithacks.html
+*
+* @param bitmap
+*        The bitmap to count the bits of
+*
+* @return The number of bits
+*/
+unsigned int bitCnt(BitMap bitmap) {
 	static const BitMap  M1 = 0x5555555555555555;  // 1 zero,  1 one ...
 	static const BitMap  M2 = 0x3333333333333333;  // 2 zeros,  2 ones ...
 	static const BitMap  M4 = 0x0f0f0f0f0f0f0f0f;  // 4 zeros,  4 ones ...
@@ -53,7 +56,16 @@ unsigned int bitCnt(BitMap bitmap)
 	return (int)bitmap;
 }
 
-unsigned int firstOne(BitMap bitmap)
+/**
+* @brief Implements De Bruijn Multiplication to find the location of the LS1B
+*        AKA bitScanForward
+*
+* @param bitmap
+*        The bitmap to be scanned
+*
+* @return the bit number designating the location of the LSB
+*/
+unsigned int ls1b(BitMap bitmap)
 {
 	// De Bruijn Multiplication, see http://chessprogramming.wikispaces.com/BitScan
 	// don't use this if bitmap = 0
@@ -76,68 +88,69 @@ unsigned int firstOne(BitMap bitmap)
 	return INDEX64[((bitmap & -bitmap) * DEBRUIJN64) >> 58];
 }
 
-unsigned int lastOne(BitMap bitmap)
-{
-	// this is Eugene Nalimov's bitScanReverse
-	// use firstOne if you can, it is faster than lastOne.
+/**
+* @brief Implements Eugene Nalimov's bitScanReverse to find the location of the MS1B
+*
+* @param bitmap
+*        The bitmap to be scanned
+*
+* @return the bit number designating the location of the MSB
+*/
+unsigned int ms1b(BitMap bitmap) {
+	// use ls1b if you can, it is faster than ms1b.
 	// don't use this if bitmap = 0
 
 	int result = 0;
-	if (bitmap > 0xFFFFFFFF)
-	{
+	if (bitmap > 0xFFFFFFFF) {
 		bitmap >>= 32;
 		result = 32;
 	}
-	if (bitmap > 0xFFFF)
-	{
+	if (bitmap > 0xFFFF) {
 		bitmap >>= 16;
 		result += 16;
 	}
-	if (bitmap > 0xFF)
-	{
+	if (bitmap > 0xFF) {
 		bitmap >>= 8;
 		result += 8;
 	}
 	return result + MS1BTABLE[bitmap];
 }
 
-void displayBitmap(BitMap in)
-{
-	int i, rank, file;
+/**
+* @brief Prints a Bitmap to the console
+*
+* @param in
+*        The bitmap to print
+*/
+void displayBitmap(BitMap in) {
+	int rank, file;
 	char boardc[64];
 
-	for (i = 0; i < 64; i++)
-	{
+	for (int i = 0; i < 64; i++) {
 		if (in & BITSET[i]) boardc[i] = '1';
 		else boardc[i] = '.';
 	}
 
 	std::cout << std::endl << "as binary integer:" << std::endl;
 
-	for (i = 63; i >= 0; i--)  std::cout << boardc[i];
-	std::cout << std::endl << "  firstOne = " << firstOne(in) << ", lastOne = " << lastOne(in) << ", bitCnt = " << bitCnt(in) << std::endl;
+	for (int i = 63; i >= 0; i--)  std::cout << boardc[i];
+	std::cout << std::endl << "  ls1b = " << ls1b(in) << ", ms1b = " << ms1b(in) << ", bitCnt = " << bitCnt(in) << std::endl;
 	std::cout << std::endl << std::endl;
 
-	if (board.viewRotated)
-	{
+	if (board.viewRotated) {
 		std::cout << "   hgfedcba" << std::endl << std::endl;
-		for (rank = 1; rank <= 8; rank++)
-		{
+		for (rank = 1; rank <= 8; rank++) {
 			std::cout << "   ";
-			for (file = 8; file >= 1; file--)
-			{
+			for (file = 8; file >= 1; file--) {
 				std::cout << boardc[BOARDINDEX[file][rank]];
 			}
 			std::cout << " " << rank << std::endl;
 		}
 	}
-	else
-	{
-		for (rank = 8; rank >= 1; rank--)
-		{
+	else {
+		for (rank = 8; rank >= 1; rank--) {
 			std::cout << " " << rank << " ";
-			for (file = 1; file <= 8; file++)
-			{
+			for (file = 1; file <= 8; file++) {
 				std::cout << boardc[BOARDINDEX[file][rank]];
 			}
 			std::cout << std::endl;
@@ -145,5 +158,6 @@ void displayBitmap(BitMap in)
 		std::cout << std::endl << "   abcdefgh" << std::endl;
 	}
 	std::cout << std::endl;
+
 	return;
 }

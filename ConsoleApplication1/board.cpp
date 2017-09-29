@@ -55,6 +55,7 @@ const char* SQUARENAME[64] = { "a1","b1","c1","d1","e1","f1","g1","h1",
 	8, 8, 8, 8, 8, 8, 8, 8
 };
 
+ int BOARDINDEX[9][9]; // index 0 is not used, only 1..8.
 
 // Evaluation scores start here, all scores are in centipawns.
 // If there are scoring data that is supposed to be symmetrical (i.e. same for BLACK & WHITE),
@@ -575,11 +576,11 @@ int Board::eval()
 	// Remember where the kings are
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-	whitekingsquare = firstOne(board.whiteKing);
+	whitekingsquare = ls1b(board.whiteKing);
 #ifdef WINGLET_VERBOSE_EVAL
 	std::cout << "EVAL> WHITE KING POSITION>            " << SQUARENAME[whitekingsquare] << std::endl;
 #endif
-	blackkingsquare = firstOne(board.blackKing);
+	blackkingsquare = ls1b(board.blackKing);
 #ifdef WINGLET_VERBOSE_EVAL
 	std::cout << "EVAL> BLACK KING POSITION>            " << SQUARENAME[blackkingsquare] << std::endl;
 #endif
@@ -702,7 +703,7 @@ int Board::eval()
 	temp = board.whitePawns;
 	while (temp)
 	{
-		square = firstOne(temp);
+		square = ls1b(temp);
 
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL> WHITE PAWN ON                   " << SQUARENAME[square] << std::endl;
@@ -795,7 +796,7 @@ int Board::eval()
 	temp = board.whiteKnights;
 	while (temp)
 	{
-		square = firstOne(temp);
+		square = ls1b(temp);
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL> WHITE KNIGHT ON                 " << SQUARENAME[square] << std::endl;
 #endif
@@ -837,7 +838,7 @@ int Board::eval()
 	temp = board.whiteBishops;
 	while (temp)
 	{
-		square = firstOne(temp);
+		square = ls1b(temp);
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL> WHITE BISHOP ON                 " << SQUARENAME[square] << std::endl;
 #endif
@@ -867,7 +868,7 @@ int Board::eval()
 	temp = board.whiteRooks;
 	while (temp)
 	{
-		square = firstOne(temp);
+		square = ls1b(temp);
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL> WHITE ROOK ON                   " << SQUARENAME[square] << std::endl;
 #endif
@@ -886,7 +887,7 @@ int Board::eval()
 
 		if (FILEMASK[square] & whitepassedpawns)
 		{
-			if ((unsigned int)square < lastOne(FILEMASK[square] & whitepassedpawns))
+			if ((unsigned int)square < ms1b(FILEMASK[square] & whitepassedpawns))
 			{
 				score += BONUS_ROOK_BEHIND_PASSED_PAWN;
 #ifdef WINGLET_VERBOSE_EVAL
@@ -907,7 +908,7 @@ int Board::eval()
 	temp = board.whiteQueens;
 	while (temp)
 	{
-		square = firstOne(temp);
+		square = ls1b(temp);
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL> WHITE QUEEN ON                  " << SQUARENAME[square] << std::endl;
 #endif
@@ -996,7 +997,7 @@ int Board::eval()
 	temp = board.blackPawns;
 	while (temp)
 	{
-		square = firstOne(temp);
+		square = ls1b(temp);
 
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL> BLACK PAWN ON                   " << SQUARENAME[square] << std::endl;
@@ -1091,7 +1092,7 @@ int Board::eval()
 	temp = board.blackKnights;
 	while (temp)
 	{
-		square = firstOne(temp);
+		square = ls1b(temp);
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL> BLACK KNIGHT ON                 " << SQUARENAME[square] << std::endl;
 #endif
@@ -1133,7 +1134,7 @@ int Board::eval()
 	temp = board.blackBishops;
 	while (temp)
 	{
-		square = firstOne(temp);
+		square = ls1b(temp);
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL> BLACK BISHOP ON                 " << SQUARENAME[square] << std::endl;
 #endif
@@ -1163,7 +1164,7 @@ int Board::eval()
 	temp = board.blackRooks;
 	while (temp)
 	{
-		square = firstOne(temp);
+		square = ls1b(temp);
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL> BLACK ROOK ON                   " << SQUARENAME[square] << std::endl;
 #endif
@@ -1182,7 +1183,7 @@ int Board::eval()
 
 		if (FILEMASK[square] & blackpassedpawns)
 		{
-			if ((unsigned int)square > firstOne(FILEMASK[square] & blackpassedpawns))
+			if ((unsigned int)square > ls1b(FILEMASK[square] & blackpassedpawns))
 			{
 				score -= BONUS_ROOK_BEHIND_PASSED_PAWN;
 #ifdef WINGLET_VERBOSE_EVAL
@@ -1203,7 +1204,7 @@ int Board::eval()
 	temp = board.blackQueens;
 	while (temp)
 	{
-		square = firstOne(temp);
+		square = ls1b(temp);
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL> BLACK QUEEN ON                  " << SQUARENAME[square] << std::endl;
 #endif
