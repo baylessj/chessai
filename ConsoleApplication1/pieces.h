@@ -49,6 +49,6 @@ class Pawn {
 public:
 	Pawn();
 	void generateMoves(unsigned char color, int* moveBufIndex, BitMap freeSquares);
-	void eval(BitMap* whitepassedpawns, int score, int DISTANCE[64][64], BitMap PASSED_WHITE[64], BitMap ISOLATED_WHITE[64],
+	void eval(BitMap* whitepassedpawns, int* score, int DISTANCE[64][64], BitMap PASSED_WHITE[64], BitMap ISOLATED_WHITE[64],
 		BitMap BACKWARD_WHITE[64], int whitekingsquare, int blackkingsquare, bool endgame);
 };

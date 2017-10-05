@@ -240,7 +240,7 @@ void Pawn::generateMoves(unsigned char color, int* moveBufIndex, BitMap freeSqua
 	}
 }
 
-void Pawn::eval(BitMap* whitepassedpawns, int score, int DISTANCE[64][64], BitMap PASSED_WHITE[64], BitMap ISOLATED_WHITE[64],
+void Pawn::eval(BitMap* whitepassedpawns, int* score, int DISTANCE[64][64], BitMap PASSED_WHITE[64], BitMap ISOLATED_WHITE[64],
 	            BitMap BACKWARD_WHITE[64], int whitekingsquare, int blackkingsquare, bool endgame) {
 	// ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	// Evaluate white pawns
@@ -259,14 +259,14 @@ void Pawn::eval(BitMap* whitepassedpawns, int score, int DISTANCE[64][64], BitMa
 		std::cout << "EVAL> WHITE PAWN ON                   " << SQUARENAME[square] << std::endl;
 #endif
 
-		score += PAWNPOS_W[square];
+		*score += PAWNPOS_W[square];
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL>  POSITION SCORE IS              " << PAWNPOS_W[square] << std::endl;
 		iwhitepos += PAWNPOS_W[square];
 		iwhitepawns += PAWNPOS_W[square];
 #endif
 
-		score += PAWN_OPPONENT_DISTANCE[DISTANCE[square][blackkingsquare]];
+		*score += PAWN_OPPONENT_DISTANCE[DISTANCE[square][blackkingsquare]];
 #ifdef WINGLET_VERBOSE_EVAL
 		std::cout << "EVAL>  DISTANCE TO OPPONNT KING SCORE " << PAWN_OPPONENT_DISTANCE[DISTANCE[square][blackkingsquare]] << std::endl;
 		iwhitepos += PAWN_OPPONENT_DISTANCE[DISTANCE[square][blackkingsquare]];
@@ -275,7 +275,7 @@ void Pawn::eval(BitMap* whitepassedpawns, int score, int DISTANCE[64][64], BitMa
 
 		if (endgame)
 		{
-			score += PAWN_OWN_DISTANCE[DISTANCE[square][whitekingsquare]];
+			*score += PAWN_OWN_DISTANCE[DISTANCE[square][whitekingsquare]];
 #ifdef WINGLET_VERBOSE_EVAL
 			std::cout << "EVAL>  DISTANCE TO OWN KING SCORE     " << PAWN_OWN_DISTANCE[DISTANCE[square][blackkingsquare]] << std::endl;
 			iwhitepos += PAWN_OWN_DISTANCE[DISTANCE[square][whitekingsquare]];
@@ -285,7 +285,7 @@ void Pawn::eval(BitMap* whitepassedpawns, int score, int DISTANCE[64][64], BitMa
 
 		if (!(PASSED_WHITE[square] & board.blackPawns))
 		{
-			score += BONUS_PASSED_PAWN;
+			*score += BONUS_PASSED_PAWN;
 #ifdef WINGLET_VERBOSE_EVAL
 			std::cout << "EVAL>  IS PASSED, BONUS IS            " << BONUS_PASSED_PAWN << std::endl;
 			iwhitepos += BONUS_PASSED_PAWN;
@@ -298,7 +298,7 @@ void Pawn::eval(BitMap* whitepassedpawns, int score, int DISTANCE[64][64], BitMa
 
 		if ((board.whitePawns ^ BITSET[square]) & FILEMASK[square])
 		{
-			score -= PENALTY_DOUBLED_PAWN;
+			*score -= PENALTY_DOUBLED_PAWN;
 #ifdef WINGLET_VERBOSE_EVAL
 			std::cout << "EVAL>  IS DOUBLED, PENALTY IS         " << PENALTY_DOUBLED_PAWN << std::endl;
 			iwhitepos -= PENALTY_DOUBLED_PAWN;
@@ -308,7 +308,7 @@ void Pawn::eval(BitMap* whitepassedpawns, int score, int DISTANCE[64][64], BitMa
 
 		if (!(ISOLATED_WHITE[square] & board.whitePawns))
 		{
-			score -= PENALTY_ISOLATED_PAWN;
+			*score -= PENALTY_ISOLATED_PAWN;
 #ifdef WINGLET_VERBOSE_EVAL
 			std::cout << "EVAL>  IS ISOLATED, PENALTY IS        " << PENALTY_ISOLATED_PAWN << std::endl;
 			iwhitepos -= PENALTY_ISOLATED_PAWN;
@@ -324,7 +324,7 @@ void Pawn::eval(BitMap* whitepassedpawns, int score, int DISTANCE[64][64], BitMa
 			{
 				if (!(BACKWARD_WHITE[square] & board.whitePawns))
 				{
-					score -= PENALTY_BACKWARD_PAWN;
+					*score -= PENALTY_BACKWARD_PAWN;
 #ifdef WINGLET_VERBOSE_EVAL
 					std::cout << "EVAL>  IS BACKWARD, PENALTY IS        " << PENALTY_BACKWARD_PAWN << std::endl;
 					iwhitepos -= PENALTY_BACKWARD_PAWN;
